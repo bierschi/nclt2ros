@@ -28,6 +28,8 @@ def main():
         print("Extracting data from %s" % args.date)
         ExtractRawData(date=args.date)
 
+    elif args.action == 'visualize':
+        print("Visualize data from %s" % args.date)
 
     """
     elif args.action == 'convert':
@@ -37,10 +39,6 @@ def main():
         else:
             converter = ConvertToRosbag(date=args.date, bag_name=args.bag_name[0], cam_folder=int(args.cam_folder[0]))
         converter.process()
-
-    elif args.action == 'visualize':
-        print("Visualize data from %s" % args.date)
-
     """
 
 

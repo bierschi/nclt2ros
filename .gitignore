@@ -106,3 +106,4 @@ venv.bak/
 #project
 .idea/
 raw_data/
+plots/
