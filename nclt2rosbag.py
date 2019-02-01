@@ -2,6 +2,7 @@
 
 import argparse
 from src.downloader.dataset import LoadDataset
+from src.extractor.extract import ExtractRawData
 
 
 def main():
@@ -22,13 +23,13 @@ def main():
     if args.action == 'download':
         print("Download NCLT dataset from %s" % args.date)
         LoadDataset(args=args)  # multiple args could be provided
-    """
-    
+
     elif args.action == 'extract':
         print("Extracting data from %s" % args.date)
-        extractor = ExtractReadData(date=args.date)
-        extractor.extract_data()
+        ExtractRawData(date=args.date)
 
+
+    """
     elif args.action == 'convert':
         print("Converting data from %s" % args.date)
         if args.cam_folder is None:

@@ -17,7 +17,7 @@ setup(
     version="1.0",
     author="Bierschneider Christian",
     author_email="christian.bierschneider@web.de",
-    description="downloads, extracts, converts, visualizes the nclt dataset",
+    description="downloads, extracts, converts and visualizes the nclt dataset",
     long_description=read('README.md'),
     license='MIT',
     py_modules=["nclt2rosbag", "definitions"],
