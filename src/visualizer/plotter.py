@@ -5,7 +5,12 @@ from src.extractor.read import ReadRawData
 
 
 class Plotter:
+    """Base class
 
+    USAGE:
+            Plotter('2013-01-10')
+
+    """
     def __init__(self, date):
 
         if isinstance(date, str):
@@ -13,12 +18,12 @@ class Plotter:
         else:
             raise TypeError('"date" must be of type string')
 
-        self.visualization_kml_dir     = ROOT_DIR + '/plots/kml/'
-        self.visualization_png_gt_dir  = ROOT_DIR + '/plots/png/gt/'
-        self.visualization_png_gps_rtk_dir = ROOT_DIR + '/plots/png/gps_rtk/'
-        self.visualization_png_gps_dir = ROOT_DIR + '/plots/png/gps/'
+        self.visualization_kml_dir            = ROOT_DIR + '/plots/kml/'
+        self.visualization_png_gt_dir         = ROOT_DIR + '/plots/png/gt/'
+        self.visualization_png_gps_rtk_dir    = ROOT_DIR + '/plots/png/gps_rtk/'
+        self.visualization_png_gps_dir        = ROOT_DIR + '/plots/png/gps/'
         self.visualization_png_wheel_odom_dir = ROOT_DIR + '/plots/png/wheel_odom/'
-        self.visualization_png_all_dir = ROOT_DIR + '/plots/png/all/'
+        self.visualization_png_all_dir        = ROOT_DIR + '/plots/png/all/'
 
         # check directories
         if not os.path.exists(self.visualization_kml_dir):
