@@ -3,7 +3,7 @@ import numpy as np
 
 
 class CoordinateFrame:
-    """Class to transform the Ground Truth data from the csv file
+    """Class to transformer the Ground Truth data from the csv file
 
     USAGE:
             CoordinateFrame(origin='odom')
@@ -21,7 +21,7 @@ class CoordinateFrame:
         else:
             raise TypeError("origin must be type of str")
 
-        self.alt_origin = 270              # meter
+        self.alt_origin         = 270      # meter
         self.earth_equat_radius = 6378135  # meter
         self.earth_polar_radius = 6356750  # meter
 
