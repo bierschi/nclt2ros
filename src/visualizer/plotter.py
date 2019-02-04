@@ -18,6 +18,7 @@ class Plotter:
         else:
             raise TypeError('"date" must be of type string')
 
+        # define directories
         self.visualization_kml_dir            = ROOT_DIR + '/plots/kml/'
         self.visualization_png_gt_dir         = ROOT_DIR + '/plots/png/gt/'
         self.visualization_png_gps_rtk_dir    = ROOT_DIR + '/plots/png/gps_rtk/'
@@ -44,6 +45,7 @@ class Plotter:
         if not os.path.exists(self.visualization_png_all_dir):
             os.makedirs(self.visualization_png_all_dir)
 
+        # kml settings
         self.kml = simplekml.Kml()
         self.green = simplekml.Color.lime
         self.red = simplekml.Color.red

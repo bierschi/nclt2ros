@@ -7,7 +7,7 @@ from src.visualizer.wheel_odom import WheelOdom
 
 
 class AllSensors(Plotter, GroundTruth, GPS_RTK, GPS, WheelOdom):
-    """Class to visualize the all sensor data in one plot
+    """Class to visualize all sensor data in one plot
 
     USAGE:
             AllSensors('2013-01-10')

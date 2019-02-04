@@ -21,7 +21,7 @@ class GPS_RTK(Plotter):
         # init base class
         Plotter.__init__(self, date=date)
 
-        # transformer coordinate frame into 'odom'
+        # transform coordinate frame into 'odom'
         self.gps_rtk_converter = CoordinateFrame(origin='odom')
 
         # load data

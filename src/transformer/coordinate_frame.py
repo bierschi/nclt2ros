@@ -3,7 +3,7 @@ import numpy as np
 
 
 class CoordinateFrame:
-    """Class to transformer the Ground Truth data from the csv file
+    """Class to transform between the odom and ground truth coordinate frame
 
     USAGE:
             CoordinateFrame(origin='odom')
