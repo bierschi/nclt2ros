@@ -11,7 +11,7 @@ the data from [The University of Michigan North Campus Long-Term Vision and LIDA
 
 
 ## USAGE
-make the script 'nclt2rosbag.py' executable
+make the script <code>nclt2rosbag.py</code> executable
 <pre><code>
 chmod +x nclt2rosbag.py
 </pre></code>
@@ -19,11 +19,12 @@ chmod +x nclt2rosbag.py
 #### general structure
 
 <pre><code>
-./nclt2rosbag.py action date --cmd
+./nclt2rosbag.py action date --lb3 --sen --vel --hokuyo --gt --gt_cov --bag --cam_folder
 </pre></code>
 <br>
-Positional arguments: `action` and `date`. They are mandatory arguments.<br>
-Specify an action command (download, extract, convert, visualize). Define also a date from the dataset
+The positional arguments <code>action</code> and <code>date</code> are mandatory.<br>
+Specify an action command (download, extract, convert, visualize). Define also a date from the dataset. <br>
+The optional arguments are --lb3 --sen --vel --hokuyo --gt --gt_cov --bag --cam_folder  
  
 #### download
 
