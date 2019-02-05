@@ -4,6 +4,9 @@ import rosbag
 import numpy as np
 import cv2
 import cv_bridge
+import geometry_msgs.msg
+import tf2_msgs.msg
+import tf.transformations
 
 from PIL import Image as pilImage
 from src.transformer.data import Data
@@ -46,14 +49,39 @@ class ImageData(Data):
                  image_msg: ROS image msg
         """
 
+        # create ros timestamp
         timestamp = rospy.Time.from_sec(utime / 1e6)
+
+        # get image and base link
+        camera_link = self.json_configs['frame_ids']['ladybug_sensor']
+        base_link = self.json_configs['frame_ids']['body']
 
         cv_img = cv2.imread(cam_file)
         cv_img = cv2.rotate(cv_img, rotateCode=0)  # 90 deg
         img_msg = self.bridge.cv2_to_imgmsg(cv_img, encoding="bgr8")
-        img_msg.header.frame_id = self.json_configs['frame_ids']['ladybug_sensor']
 
-        return timestamp, img_msg
+        img_msg.header.frame_id = camera_link
+
+        # create base_link camera_link static transformer
+        img_static_transform_stamped = geometry_msgs.msg.TransformStamped()
+        img_static_transform_stamped.header.stamp = timestamp
+        img_static_transform_stamped.header.frame_id = base_link
+        img_static_transform_stamped.child_frame_id = camera_link
+
+        img_static_transform_stamped.transform.translation.x = 0.035
+        img_static_transform_stamped.transform.translation.y = -0.002
+        img_static_transform_stamped.transform.translation.z = 1.23
+
+        quat = tf.transformations.quaternion_from_euler(0, 0, 0)
+        img_static_transform_stamped.transform.rotation.x = quat[0]
+        img_static_transform_stamped.transform.rotation.y = quat[1]
+        img_static_transform_stamped.transform.rotation.z = quat[2]
+        img_static_transform_stamped.transform.rotation.w = quat[3]
+
+        # publish static transform
+        tf_static_msg = tf2_msgs.msg.TFMessage([img_static_transform_stamped])
+
+        return timestamp, img_msg, tf_static_msg
 
     def read_image(self, cam_nr=2):
         """reads images from a cam_nr directory

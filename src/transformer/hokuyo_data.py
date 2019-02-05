@@ -2,6 +2,10 @@ import struct
 import numpy as np
 import rospy
 import rosbag
+import geometry_msgs.msg
+import tf2_msgs.msg
+import tf.transformations
+
 from sensor_msgs.msg import LaserScan
 from src.transformer.data import Data
 
@@ -88,10 +92,14 @@ class HokuyoData(Data):
             # create a ros timestamp
             timestamp = rospy.Time.from_sec(utime / 1e6)
 
+            # get hokuyo and base link
+            hokuyo_urg_link = self.json_configs['frame_ids']['hokuyo_urg_lidar']
+            base_link       = self.json_configs['frame_ids']['body']
+
             # create a LaserScan message
             scan = LaserScan()
             scan.header.stamp = timestamp
-            scan.header.frame_id = self.json_configs['frame_ids']['hokuyo_urg_lidar']
+            scan.header.frame_id = hokuyo_urg_link
 
             scan.angle_min = -np.pi / 2
             scan.angle_max = np.pi / 2
@@ -103,7 +111,26 @@ class HokuyoData(Data):
 
             scan.ranges = data
 
-            return timestamp, scan
+            # create base_link hokuyo_urg_link static transformer
+            hok_static_transform_stamped = geometry_msgs.msg.TransformStamped()
+            hok_static_transform_stamped.header.stamp = timestamp
+            hok_static_transform_stamped.header.frame_id = base_link
+            hok_static_transform_stamped.child_frame_id = hokuyo_urg_link
+
+            hok_static_transform_stamped.transform.translation.x = 0.31
+            hok_static_transform_stamped.transform.translation.y = 0
+            hok_static_transform_stamped.transform.translation.z = 0.38
+
+            quat = tf.transformations.quaternion_from_euler(0, 0, 0)
+            hok_static_transform_stamped.transform.rotation.x = quat[0]
+            hok_static_transform_stamped.transform.rotation.y = quat[1]
+            hok_static_transform_stamped.transform.rotation.z = quat[2]
+            hok_static_transform_stamped.transform.rotation.w = quat[3]
+
+            # publish static transform
+            tf_static_msg = tf2_msgs.msg.TFMessage([hok_static_transform_stamped])
+
+            return timestamp, scan, tf_static_msg
 
         except Exception as e:
             print(e)
@@ -147,10 +174,14 @@ class HokuyoData(Data):
             # create ros timestamp
             timestamp = rospy.Time.from_sec(utime / 1e6)
 
+            # get hokuyo and base link
+            hokuyo_utm_link = self.json_configs['frame_ids']['hokuyo_utm_lidar']
+            base_link       = self.json_configs['frame_ids']['body']
+
             # create LaserScan message
             scan = LaserScan()
             scan.header.stamp = timestamp
-            scan.header.frame_id = self.json_configs['frame_ids']['hokuyo_utm_lidar']
+            scan.header.frame_id = hokuyo_utm_link
 
             scan.angle_min = -np.pi / 2
             scan.angle_max = np.pi / 2
@@ -162,7 +193,26 @@ class HokuyoData(Data):
 
             scan.ranges = data
 
-            return timestamp, scan
+            # create base_link hokuyo_utm_link static transformer
+            hok_static_transform_stamped = geometry_msgs.msg.TransformStamped()
+            hok_static_transform_stamped.header.stamp = timestamp
+            hok_static_transform_stamped.header.frame_id = base_link
+            hok_static_transform_stamped.child_frame_id = hokuyo_utm_link
+
+            hok_static_transform_stamped.transform.translation.x = 0.28
+            hok_static_transform_stamped.transform.translation.y = 0
+            hok_static_transform_stamped.transform.translation.z = 0.44
+
+            quat = tf.transformations.quaternion_from_euler(0, 0, -0.785)
+            hok_static_transform_stamped.transform.rotation.x = quat[0]
+            hok_static_transform_stamped.transform.rotation.y = quat[1]
+            hok_static_transform_stamped.transform.rotation.z = quat[2]
+            hok_static_transform_stamped.transform.rotation.w = quat[3]
+
+            # publish static transform
+            tf_static_msg = tf2_msgs.msg.TFMessage([hok_static_transform_stamped])
+
+            return timestamp, scan, tf_static_msg
 
         except Exception as e:
             print(e)

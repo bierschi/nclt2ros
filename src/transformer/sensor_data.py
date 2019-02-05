@@ -2,37 +2,37 @@ import rospy
 import numpy as np
 import tf.transformations
 import tf2_msgs.msg
+import tf2_ros
 import geometry_msgs.msg
 
-from src.transformer.data import Data
 from sensor_msgs.msg import NavSatStatus, NavSatFix, Imu, MagneticField
 from nav_msgs.msg import Odometry
 from std_msgs.msg import UInt16, Float64
-
+from src.transformer.data import Data
 
 # default COVARIANCE matrices
 IMU_ORIENT_COVAR = [1e-3, 0, 0,
                     0, 1e-3, 0,
                     0, 0, 1e-3]
 
-IMU_VEL_COVAR = [1e-3, 0, 0,
-                 0, 1e-3, 0,
-                 0, 0, 1e-3]
+IMU_VEL_COVAR    = [1e-3, 0, 0,
+                    0, 1e-3, 0,
+                    0, 0, 1e-3]
 
-IMU_ACCEL_COVAR = [1e-3, 0, 0,
-                   0, 1e-3, 0,
-                   0, 0, 1e-3]
+IMU_ACCEL_COVAR  = [1e-3, 0, 0,
+                    0, 1e-3, 0,
+                    0, 0, 1e-3]
 
-NAVSAT_COVAR = [1, 0, 0,
-                0, 1, 0,
-                0, 0, 1]
+NAVSAT_COVAR     = [1, 0, 0,
+                    0, 1, 0,
+                    0, 0, 1]
 
-POSE_COVAR = [1e-3, 0, 0, 0, 0, 0,
-              0, 1e-3, 0, 0, 0, 0,
-              0, 0, 1e-3, 0, 0, 0,
-              0, 0, 0, 1e-3, 0, 0,
-              0, 0, 0, 0, 1e-3, 0,
-              0, 0, 0, 0, 0, 1e-3]
+POSE_COVAR       = [1e-3, 0, 0, 0, 0, 0,
+                    0, 1e-3, 0, 0, 0, 0,
+                    0, 0, 1e-3, 0, 0, 0,
+                    0, 0, 0, 1e-3, 0, 0,
+                    0, 0, 0, 0, 1e-3, 0,
+                    0, 0, 0, 0, 0, 1e-3]
 
 
 class SensorData(Data):
@@ -48,6 +48,7 @@ class SensorData(Data):
         Data.__init__(self, date=date)
 
         self.tf_broadcast = tf.TransformBroadcaster()
+        self.static_transform = tf2_ros.StaticTransformBroadcaster()
 
         self.i_wheel = 0
         self.last_twist = None
@@ -83,6 +84,10 @@ class SensorData(Data):
         # create ros timestamp
         timestamp = rospy.Time.from_sec(utime / 1e6)
 
+        # get gps and base link
+        gps_link = self.json_configs['frame_ids']['gps_sensor']
+        base_link = self.json_configs['frame_ids']['body']
+
         # fill NavSat message
         status = NavSatStatus()
 
@@ -98,7 +103,7 @@ class SensorData(Data):
 
         navsat = NavSatFix()
         navsat.header.stamp = timestamp
-        navsat.header.frame_id = self.json_configs['frame_ids']['gps_sensor']
+        navsat.header.frame_id = gps_link
         navsat.status = status
 
         navsat.latitude = np.rad2deg(lat)
@@ -114,7 +119,26 @@ class SensorData(Data):
         speed = Float64()
         speed.data = speed_raw
 
-        return navsat, track, speed, timestamp
+        # create base_link gps_link static transformer
+        gps_static_transform_stamped = geometry_msgs.msg.TransformStamped()
+        gps_static_transform_stamped.header.stamp = timestamp
+        gps_static_transform_stamped.header.frame_id = base_link
+        gps_static_transform_stamped.child_frame_id = gps_link
+
+        gps_static_transform_stamped.transform.translation.x = 0
+        gps_static_transform_stamped.transform.translation.y = 0.25
+        gps_static_transform_stamped.transform.translation.z = 0.51
+
+        quat = tf.transformations.quaternion_from_euler(0, 0, 0)
+        gps_static_transform_stamped.transform.rotation.x = quat[0]
+        gps_static_transform_stamped.transform.rotation.y = quat[1]
+        gps_static_transform_stamped.transform.rotation.z = quat[2]
+        gps_static_transform_stamped.transform.rotation.w = quat[3]
+
+        # publish static transform
+        tf_static_msg = tf2_msgs.msg.TFMessage([gps_static_transform_stamped])
+
+        return navsat, track, speed, timestamp, tf_static_msg
 
     def gps_rtk_to_navsat(self, gps_rtk_list, i):
         """ converts gps_rtk data to ROS NavSatFix messages
@@ -138,6 +162,10 @@ class SensorData(Data):
         # create ros timestamp
         timestamp = rospy.Time.from_sec(utime / 1e6)
 
+        # get gps_rtk and base link
+        gps_rtk_link = self.json_configs['frame_ids']['gps_rtk_sensor']
+        base_link    = self.json_configs['frame_ids']['body']
+
         # fill NavSat message
         status = NavSatStatus()
 
@@ -153,7 +181,7 @@ class SensorData(Data):
 
         navsat = NavSatFix()
         navsat.header.stamp = timestamp
-        navsat.header.frame_id = self.json_configs['frame_ids']['gps_rtk_sensor']
+        navsat.header.frame_id = gps_rtk_link
         navsat.status = status
 
         navsat.latitude = np.rad2deg(lat)
@@ -169,7 +197,26 @@ class SensorData(Data):
         speed = Float64()
         speed.data = speed_raw
 
-        return navsat, track, speed, timestamp
+        # create base_link gps_rtk_link static transformer
+        gps_rtk_static_transform_stamped = geometry_msgs.msg.TransformStamped()
+        gps_rtk_static_transform_stamped.header.stamp = timestamp
+        gps_rtk_static_transform_stamped.header.frame_id = base_link
+        gps_rtk_static_transform_stamped.child_frame_id = gps_rtk_link
+
+        gps_rtk_static_transform_stamped.transform.translation.x = -0.24
+        gps_rtk_static_transform_stamped.transform.translation.y = 0
+        gps_rtk_static_transform_stamped.transform.translation.z = 1.24
+
+        quat = tf.transformations.quaternion_from_euler(0, 0, 0)
+        gps_rtk_static_transform_stamped.transform.rotation.x = quat[0]
+        gps_rtk_static_transform_stamped.transform.rotation.y = quat[1]
+        gps_rtk_static_transform_stamped.transform.rotation.z = quat[2]
+        gps_rtk_static_transform_stamped.transform.rotation.w = quat[3]
+
+        # publish static transform
+        tf_static_msg = tf2_msgs.msg.TFMessage([gps_rtk_static_transform_stamped])
+
+        return navsat, track, speed, timestamp, tf_static_msg
 
     def wheel_odom_to_odometry(self, odom_list, odom_cov_list, wheels_list, kvh_list, i):
         """converts recorded wheel odom to ROS Odometry messages
@@ -212,11 +259,15 @@ class SensorData(Data):
         # create ros timestamp
         timestamp = rospy.Time.from_sec(utime / 1e6)
 
+        # get wheel odometry and body link
+        wheel_odom_link = str(self.json_configs['frame_ids']['wheel_odometry'])
+        base_link       = str(self.json_configs['frame_ids']['body'])
+
         # create ros odometry message
         odom = Odometry()
         odom.header.stamp = timestamp
-        odom.header.frame_id = str(self.json_configs['frame_ids']['wheel_odometry'])
-        odom.child_frame_id  = str(self.json_configs['frame_ids']['body'])
+        odom.header.frame_id = wheel_odom_link
+        odom.child_frame_id  = base_link
 
         odom.pose.pose.position.x = x                                                                       # x
         odom.pose.pose.position.y = -y  # change recorded coordinate system to ros coordinate system *(-1)  # -y
@@ -273,8 +324,8 @@ class SensorData(Data):
             self.init_twist_heading = True
             self.last_twist_heading = odom.twist.twist.angular.z
 
-        odom.twist.twist.linear.y = 0.0
-        odom.twist.twist.linear.z = 0.0
+        odom.twist.twist.linear.y  = 0.0
+        odom.twist.twist.linear.z  = 0.0
         odom.twist.twist.angular.x = 0.0
         odom.twist.twist.angular.y = 0.0
 
@@ -289,8 +340,8 @@ class SensorData(Data):
         # broadcast odom base_link transform
         geo_msg = geometry_msgs.msg.TransformStamped()
         geo_msg.header.stamp = timestamp
-        geo_msg.header.frame_id = self.json_configs['frame_ids']['wheel_odometry']
-        geo_msg.child_frame_id = self.json_configs['frame_ids']['body']
+        geo_msg.header.frame_id = wheel_odom_link
+        geo_msg.child_frame_id  = base_link
         geo_msg.transform.translation.x = x
         geo_msg.transform.translation.y = -y
         geo_msg.transform.translation.z = -z
@@ -301,7 +352,26 @@ class SensorData(Data):
 
         tf_msg = tf2_msgs.msg.TFMessage([geo_msg])
 
-        return odom, timestamp, tf_msg
+        # create world odom static transformer
+        odom_static_transform_stamped = geometry_msgs.msg.TransformStamped()
+        odom_static_transform_stamped.header.stamp = timestamp
+        odom_static_transform_stamped.header.frame_id = "world"
+        odom_static_transform_stamped.child_frame_id = wheel_odom_link
+
+        odom_static_transform_stamped.transform.translation.x = 0
+        odom_static_transform_stamped.transform.translation.y = 0
+        odom_static_transform_stamped.transform.translation.z = 0
+
+        quat = tf.transformations.quaternion_from_euler(0, 0, 1.57)
+        odom_static_transform_stamped.transform.rotation.x = quat[0]
+        odom_static_transform_stamped.transform.rotation.y = quat[1]
+        odom_static_transform_stamped.transform.rotation.z = quat[2]
+        odom_static_transform_stamped.transform.rotation.w = quat[3]
+
+        # publish static transform
+        tf_static_msg = tf2_msgs.msg.TFMessage([odom_static_transform_stamped])
+
+        return odom, timestamp, tf_msg, tf_static_msg
 
     def ms25_to_imu(self, imu_list, i):
         """converts ms25 data to ROS imu messages
@@ -327,19 +397,25 @@ class SensorData(Data):
         # create ros timestamp
         timestamp = rospy.Time.from_sec(utime / 1e6)
 
+        # get imu and base link
+        imu_link   = self.json_configs['frame_ids']['imu_sensor']
+        base_link  = self.json_configs['frame_ids']['body']
+
         # create ros imu message
         imu = Imu()
         imu.header.stamp = timestamp
-        imu.header.frame_id = self.json_configs['frame_ids']['imu_sensor']
+        imu.header.frame_id = imu_link
 
         # swap x,y due to the enu frame, negate z
         quaternion = tf.transformations.quaternion_from_euler(
             rot_ps, rot_rs, -rot_hs
         )
+
         # alternative
         #quaternion = tf.transformations.quaternion_from_euler(
         #    rot_rs, -rot_ps, -rot_hs
         #)
+
         imu.orientation.x = quaternion[0]
         imu.orientation.y = quaternion[1]
         imu.orientation.z = quaternion[2]
@@ -364,7 +440,26 @@ class SensorData(Data):
         mag.magnetic_field.y = mag_xs
         mag.magnetic_field.z = -mag_zs
 
-        return imu, mag, timestamp
+        # create base_link imu static transformer
+        imu_static_transform_stamped = geometry_msgs.msg.TransformStamped()
+        imu_static_transform_stamped.header.stamp = timestamp
+        imu_static_transform_stamped.header.frame_id = base_link
+        imu_static_transform_stamped.child_frame_id = imu_link
+
+        imu_static_transform_stamped.transform.translation.x = -0.11
+        imu_static_transform_stamped.transform.translation.y = 0.18
+        imu_static_transform_stamped.transform.translation.z = 0.71
+
+        quat = tf.transformations.quaternion_from_euler(0, 0, 0)
+        imu_static_transform_stamped.transform.rotation.x = quat[0]
+        imu_static_transform_stamped.transform.rotation.y = quat[1]
+        imu_static_transform_stamped.transform.rotation.z = quat[2]
+        imu_static_transform_stamped.transform.rotation.w = quat[3]
+
+        # publish static transform
+        tf_static_msg = tf2_msgs.msg.TFMessage([imu_static_transform_stamped])
+
+        return imu, mag, timestamp, tf_static_msg
 
     def gt_to_odometry(self, gt_list, gt_cov_list, i):
         """converts ground_truth odometry to ROS odometry messages
@@ -375,13 +470,14 @@ class SensorData(Data):
         :return: fill bag with gt, timestamp
         """
 
-        utime           = gt_list[i, 0]
-        x               = gt_list[i, 1]
-        y               = gt_list[i, 2]
-        z               = gt_list[i, 3]
-        euler_roll_rad  = gt_list[i, 4]
-        euler_pitch_rad = gt_list[i, 5]
-        euler_yaw_rad   = gt_list[i, 6]
+        # load data from list
+        utime     = gt_list[i, 0]
+        x         = gt_list[i, 1]
+        y         = gt_list[i, 2]
+        z         = gt_list[i, 3]
+        roll_rad  = gt_list[i, 4]
+        pitch_rad = gt_list[i, 5]
+        yaw_rad   = gt_list[i, 6]
 
         # get upper diagonal of the covariance matrix
         xx = gt_cov_list[self.i_gt, 1];  xy = gt_cov_list[self.i_gt, 2];  xz = gt_cov_list[self.i_gt, 3];  xr = gt_cov_list[self.i_gt, 4]
@@ -391,20 +487,28 @@ class SensorData(Data):
         rp = gt_cov_list[self.i_gt, 17]; rh = gt_cov_list[self.i_gt, 18]; pp = gt_cov_list[self.i_gt, 19]; ph = gt_cov_list[self.i_gt, 20]
         hh = gt_cov_list[self.i_gt, 21]
 
+        # load utime from gt_cov list
         utime_gt_cov = gt_cov_list[self.i_gt, 0]
 
+        # create ros timestamp
         timestamp = rospy.Time.from_sec(utime / 1e6)
 
+        # get ground truth link
+        gt_link = str(self.json_configs['frame_ids']['ground_truth'])
+
+        # create odometry message for ground truth
         gt = Odometry()
         gt.header.stamp = timestamp
-        gt.header.frame_id = str(self.json_configs['frame_ids']['ground_truth'])
+        gt.header.frame_id = gt_link
         # odom.child_frame_id = 'base_link'
 
-        gt.pose.pose.position.x = y   # x
-        gt.pose.pose.position.y = x  # y
+        # change due to the ENU frame
+        gt.pose.pose.position.x = y - 107.724666286     # x
+        gt.pose.pose.position.y = x - 75.829339527800   # y
         gt.pose.pose.position.z = -z  # z
 
-        quaternion = tf.transformations.quaternion_from_euler(euler_roll_rad, euler_pitch_rad, euler_yaw_rad)
+        # create quaternion from euler angles
+        quaternion = tf.transformations.quaternion_from_euler(roll_rad, pitch_rad, yaw_rad)
         gt.pose.pose.orientation.x = quaternion[0]
         gt.pose.pose.orientation.y = quaternion[1]
         gt.pose.pose.orientation.z = quaternion[2]
@@ -428,7 +532,6 @@ class SensorData(Data):
 
             self.last_gt_cov = gt.pose.covariance
             self.i_gt += 1
-            print(self.i_gt)
 
         elif self.init_gt_cov:
             gt.pose.covariance = self.last_gt_cov
@@ -447,4 +550,23 @@ class SensorData(Data):
         gt.twist.twist.angular.y = 0.0
         gt.twist.twist.angular.z = 0.0
 
-        return gt, timestamp
+        # create world ground truth static transformer
+        gt_static_transform_stamped = geometry_msgs.msg.TransformStamped()
+        gt_static_transform_stamped.header.stamp = timestamp
+        gt_static_transform_stamped.header.frame_id = "world"
+        gt_static_transform_stamped.child_frame_id = gt_link
+
+        gt_static_transform_stamped.transform.translation.x = 0
+        gt_static_transform_stamped.transform.translation.y = 0
+        gt_static_transform_stamped.transform.translation.z = 0
+
+        quat = tf.transformations.quaternion_from_euler(0, 0, 0)
+        gt_static_transform_stamped.transform.rotation.x = quat[0]
+        gt_static_transform_stamped.transform.rotation.y = quat[1]
+        gt_static_transform_stamped.transform.rotation.z = quat[2]
+        gt_static_transform_stamped.transform.rotation.w = quat[3]
+
+        # publish static transform
+        tf_static_msg = tf2_msgs.msg.TFMessage([gt_static_transform_stamped])
+
+        return gt, timestamp, tf_static_msg

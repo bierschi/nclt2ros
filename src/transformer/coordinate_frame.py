@@ -113,7 +113,7 @@ class CoordinateFrame:
 
 
 if __name__ == '__main__':
-    cofr = CoordinateFrame(origin='odom')
+    cofr = CoordinateFrame(origin='gt')
     print(cofr.get_lat(x=0))
     print(cofr.get_lon(y=0))
     print(cofr.get_x(lat=42.2936096617))

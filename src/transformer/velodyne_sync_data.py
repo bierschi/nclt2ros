@@ -3,6 +3,9 @@ import rospy
 import struct
 import os
 import numpy as np
+import geometry_msgs.msg
+import tf2_msgs.msg
+import tf.transformations
 
 from sensor_msgs.msg import PointCloud2, PointField
 from src.transformer.data import Data
@@ -109,10 +112,14 @@ class VelodyneSyncData(Data):
         timestamp = rospy.Time.from_sec(utime / 1e6)
         points = np.array(hits)
 
+        # get velodyne and base link
+        velodyne_link = self.json_configs['frame_ids']['velodyne_lidar']
+        base_link = self.json_configs['frame_ids']['body']
+
         # create a PointCloud2 message
         pc2_msg = PointCloud2()
         pc2_msg.header.stamp = timestamp
-        pc2_msg.header.frame_id = self.json_configs['frame_ids']['velodyne_lidar']
+        pc2_msg.header.frame_id = velodyne_link
 
         num_values = points.shape[0]
         assert(num_values > 0)
@@ -145,4 +152,23 @@ class VelodyneSyncData(Data):
         pc2_msg.width = num_points
         pc2_msg.data = np.asarray(points, np.float32).tostring()
 
-        return timestamp, pc2_msg
+        # create base_link velodyne_link static transformer
+        vel_static_transform_stamped = geometry_msgs.msg.TransformStamped()
+        vel_static_transform_stamped.header.stamp = timestamp
+        vel_static_transform_stamped.header.frame_id = base_link
+        vel_static_transform_stamped.child_frame_id = velodyne_link
+
+        vel_static_transform_stamped.transform.translation.x = 0.002
+        vel_static_transform_stamped.transform.translation.y = 0.004
+        vel_static_transform_stamped.transform.translation.z = 0.957
+
+        quat = tf.transformations.quaternion_from_euler(0, 0, 0)
+        vel_static_transform_stamped.transform.rotation.x = quat[0]
+        vel_static_transform_stamped.transform.rotation.y = quat[1]
+        vel_static_transform_stamped.transform.rotation.z = quat[2]
+        vel_static_transform_stamped.transform.rotation.w = quat[3]
+
+        # publish static transform
+        tf_static_msg = tf2_msgs.msg.TFMessage([vel_static_transform_stamped])
+
+        return timestamp, pc2_msg, tf_static_msg
