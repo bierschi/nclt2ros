@@ -9,10 +9,10 @@ import tf2_msgs.msg
 import tf.transformations
 
 from PIL import Image as pilImage
-from src.transformer.data import Data
+from src.extractor.raw_data import RawData
 
 
-class ImageData(Data):
+class ImageData(RawData):
     """Class to transform the images from the ladybug camera
 
     USAGE:
@@ -22,7 +22,7 @@ class ImageData(Data):
     def __init__(self, date, write_to_bag=False):
 
         # init base class
-        Data.__init__(self, date=date)
+        RawData.__init__(self, date=date)
 
         self.num_cameras = 6
         self.bridge = cv_bridge.CvBridge()

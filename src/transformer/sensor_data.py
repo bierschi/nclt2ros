@@ -8,7 +8,7 @@ import geometry_msgs.msg
 from sensor_msgs.msg import NavSatStatus, NavSatFix, Imu, MagneticField
 from nav_msgs.msg import Odometry
 from std_msgs.msg import UInt16, Float64
-from src.transformer.data import Data
+from src.extractor.raw_data import RawData
 
 # default COVARIANCE matrices
 IMU_ORIENT_COVAR = [1e-3, 0, 0,
@@ -35,7 +35,7 @@ POSE_COVAR       = [1e-3, 0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0, 1e-3]
 
 
-class SensorData(Data):
+class SensorData(RawData):
     """Class to convert the sensor_data directory to ROS messages
 
     USAGE:
@@ -45,7 +45,7 @@ class SensorData(Data):
     def __init__(self, date):
 
         # init base class
-        Data.__init__(self, date=date)
+        RawData.__init__(self, date=date)
 
         self.tf_broadcast = tf.TransformBroadcaster()
         self.static_transform = tf2_ros.StaticTransformBroadcaster()
@@ -146,7 +146,7 @@ class SensorData(Data):
         :param gps_rtk_list: list, containing gps_rtk data
         :param            i: row counter
 
-        :return: fill bag with navsat, track, speed, timestamp
+        :return: fill bag with navsat, track, speed, timestamp, tf_static_msg
         """
 
         # load data from list
@@ -227,7 +227,7 @@ class SensorData(Data):
         :param      kvh_list: list containing the heading from the KVH
         :param             i: row counter
 
-        :return: fill bag with odom, timestamp, tf_msg
+        :return: fill bag with odom, timestamp, tf_msg, tf_static_msg
         """
 
         # get 6 DoF odometry
@@ -379,7 +379,7 @@ class SensorData(Data):
         :param imu_list: list containing the imu data from sensor ms25
         :param        i: list row counter
 
-        :return: fill bag with imu, mag, timestamp
+        :return: fill bag with imu, mag, timestamp, tf_static_msg
         """
 
         # load data from list
@@ -467,7 +467,7 @@ class SensorData(Data):
         :param gt_list: list containing the ground truth data
         :param       i: row counter
 
-        :return: fill bag with gt, timestamp
+        :return: fill bag with gt, timestamp, tf_static_msg
         """
 
         # load data from list

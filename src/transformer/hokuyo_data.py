@@ -7,10 +7,10 @@ import tf2_msgs.msg
 import tf.transformations
 
 from sensor_msgs.msg import LaserScan
-from src.transformer.data import Data
+from src.extractor.raw_data import RawData
 
 
-class HokuyoData(Data):
+class HokuyoData(RawData):
     """Class to transform the hokuyo binary data to ROS LaserScan messages
 
     USAGE:
@@ -20,11 +20,14 @@ class HokuyoData(Data):
     def __init__(self, date, write_to_bag=False):
 
         # init base class
-        Data.__init__(self, date=date)
+        RawData.__init__(self, date=date)
 
         # load binary files
-        self.f_bin_hokuyo_4m  = open(self.hokuyo_data_dir + '/%s/hokuyo_4m.bin' % self.date, 'r')
-        self.f_bin_hokuyo_30m = open(self.hokuyo_data_dir + '/%s/hokuyo_30m.bin' % self.date, 'r')
+        if self.hokuyo_data_flag:
+            self.f_bin_hokuyo_4m  = open(self.hokuyo_data_dir + '/%s/hokuyo_4m.bin' % self.date, 'r')
+            self.f_bin_hokuyo_30m = open(self.hokuyo_data_dir + '/%s/hokuyo_30m.bin' % self.date, 'r')
+        else:
+            raise ValueError('hokuyo_data directory not exists')
 
         self.write_to_bag = write_to_bag
 

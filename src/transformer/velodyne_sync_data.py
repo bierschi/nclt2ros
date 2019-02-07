@@ -8,10 +8,10 @@ import tf2_msgs.msg
 import tf.transformations
 
 from sensor_msgs.msg import PointCloud2, PointField
-from src.transformer.data import Data
+from src.extractor.raw_data import RawData
 
 
-class VelodyneSyncData(Data):
+class VelodyneSyncData(RawData):
     """Class to transform the velodyne_sync binary files to ROS PointCloud2 messages
 
     USAGE:
@@ -21,7 +21,7 @@ class VelodyneSyncData(Data):
     def __init__(self, date, write_to_bag=False):
 
         # init base class
-        Data.__init__(self, date=date)
+        RawData.__init__(self, date=date)
 
         self.write_to_bag = write_to_bag
 
@@ -34,8 +34,10 @@ class VelodyneSyncData(Data):
         :return: timestamps_microsec: List, containing the sorted timestamps
                            bin_files: List, containing the sorted binary files
         """
-
-        files = os.listdir(self.velodyne_sync_data_dir)
+        if self.velodyne_data_flag:
+            files = os.listdir(self.velodyne_sync_data_dir)
+        else:
+            raise ValueError('velodyne_data not exists')
 
         timestamps_microsec = sorted([long(os.path.splitext(f)[0]) for f in files if f.endswith('.bin')])
         bin_files = sorted([f for f in files if f.endswith('.bin')])

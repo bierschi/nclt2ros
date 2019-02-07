@@ -9,8 +9,13 @@ With [nclt2rosbag](https://github.com/bierschi/nclt2rosbag) it is possible to
 
 the data from [The University of Michigan North Campus Long-Term Vision and LIDAR Dataset.](http://robots.engin.umich.edu/nclt/)
 
+#### Table of Contents:
 
-## USAGE
+- [Usage](https://github.com/bierschi/nclt2rosbag#usage)
+- [Examples]()
+- [Commands]()
+
+## Usage
 make the script <code>nclt2rosbag.py</code> executable
 <pre><code>
 chmod +x nclt2rosbag.py
@@ -22,21 +27,24 @@ chmod +x nclt2rosbag.py
 ./nclt2rosbag.py action date --lb3 --sen --vel --hokuyo --gt --gt_cov --bag --cam_folder
 </pre></code>
 <br>
-The positional arguments <code>action</code> and <code>date</code> are mandatory.<br>
-Specify an action command (download, extract, convert, visualize). Define also a date from the dataset. <br>
-The optional arguments are --lb3 --sen --vel --hokuyo --gt --gt_cov --bag --cam_folder  
+The positional arguments <code>action</code> and <code>date</code> are mandatory. Indicate an action command (download, extract, convert, visualize). 
+Define also a date from the dataset. <br>
+The optional arguments are --lb3 --sen --vel --hokuyo --gt --gt_cov --bag --cam_folder.  
  
 #### download
 
 <pre><code>
-./nclt2rosbag.py download 2013-01-10 --gt --gt_cov --sen --hokyuo --vel
+./nclt2rosbag.py download 2013-01-10 --gt --gt_cov --sen --hokuyo --vel
 </pre></code>
+Downloads the <code>Ground Truth Pose</code>, <code>Ground Truth Covariance</code>, <code>Sensors</code>, 
+<code>Hokuyo</code> and the <code>Velodyne</code> data from date <code>2013-01-10</code>.
 
 #### extract
 
 <pre><code>
 ./nclt2rosbag.py extract 2013-01-10
 </pre></code>
+Extracts the tarballs, if available, in folder date named <code>2013-01-10</code>
 
 #### convert
 
