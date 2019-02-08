@@ -68,3 +68,8 @@ class RawData:
         # open json configuration file
         with open(ROOT_DIR + '/cfg/configuration.json') as json_configs:
             self.json_configs = json.load(json_configs)
+
+        # create rosbag directory
+        self.rosbag_dir = ROOT_DIR + '/rosbags'
+        if not os.path.exists(self.rosbag_dir):
+            os.makedirs(self.rosbag_dir)

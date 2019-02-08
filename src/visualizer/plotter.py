@@ -1,7 +1,7 @@
 import os
 import simplekml
 from definitions import ROOT_DIR
-from src.extractor.read import ReadRawData
+from src.extractor.read_sensor_data import ReadRawData
 
 
 class Plotter:

@@ -2,7 +2,7 @@
 
 import argparse
 from src.downloader.dataset import LoadDataset
-from src.extractor.extract import ExtractRawData
+from src.extractor.extract import Extract
 from src.converter.convert import Convert
 from src.visualizer.visualize import Visualize
 
@@ -43,7 +43,7 @@ def main():
 
     elif args.action == 'extract':
         print("Extracting data from %s" % args.date)
-        ExtractRawData(date=args.date)
+        Extract(date=args.date)
 
     elif args.action == 'visualize':
         Visualize(args=args)

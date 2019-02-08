@@ -3,7 +3,7 @@ import tarfile
 from raw_data import RawData
 
 
-class ExtractRawData(RawData):
+class Extract(RawData):
     """Class to extract the raw data
 
     USAGE:

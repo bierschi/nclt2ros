@@ -35,11 +35,11 @@ POSE_COVAR       = [1e-3, 0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0, 1e-3]
 
 
-class SensorData(RawData):
+class RosSensorMsg(RawData):
     """Class to convert the sensor_data directory to ROS messages
 
     USAGE:
-            SensorData('2013-01-10')
+            RosSensorMsg('2013-01-10')
 
     """
     def __init__(self, date):

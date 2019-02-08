@@ -12,8 +12,9 @@ the data from [The University of Michigan North Campus Long-Term Vision and LIDA
 #### Table of Contents:
 
 - [Usage](https://github.com/bierschi/nclt2rosbag#usage)
-- [Examples]()
-- [Commands]()
+- [Examples](https://github.com/bierschi/nclt2rosbag#examples)
+- [All commands](https://github.com/bierschi/nclt2rosbag#all-commands)
+- [Transformation tree](https://github.com/bierschi/nclt2rosbag#transformation-tree)
 
 ## Usage
 make the script <code>nclt2rosbag.py</code> executable
@@ -24,13 +25,16 @@ chmod +x nclt2rosbag.py
 #### general structure
 
 <pre><code>
-./nclt2rosbag.py action date --lb3 --sen --vel --hokuyo --gt --gt_cov --bag --cam_folder
+./nclt2rosbag.py action date<br>
+download&nbsp: --lb3 --sen --vel --hokuyo --gt --gt_cov <br>
+visualize&nbsp;&nbsp;&nbsp: --gt_kml --gt_png --gps_kml --gps_png --gps_rtk_kml --gps_rtk_png --odom_kml --odom_png --all <br>
+convert&nbsp;&nbsp;&nbsp;&nbsp;&nbsp: --bag --cam_folder
 </pre></code>
 <br>
 The positional arguments <code>action</code> and <code>date</code> are mandatory. Indicate an action command (download, extract, convert, visualize). 
-Define also a date from the dataset. <br>
-The optional arguments are --lb3 --sen --vel --hokuyo --gt --gt_cov --bag --cam_folder.  
- 
+Define also a date from the dataset. The commands for download, visualize and convert are optional arguments.
+
+
 #### download
 
 <pre><code>
@@ -49,12 +53,19 @@ Extracts the tarballs, if available, in folder date named <code>2013-01-10</code
 #### convert
 
 <pre><code>
-./nclt2rosbag.py convert 2013-01-10
+./nclt2rosbag.py convert 2013-01-10 
 </pre></code>
 
 #### visualize
 
 <pre><code>
-./nclt2rosbag.py visualize 2013-01-10
+./nclt2rosbag.py visualize 2013-01-10 --gt_kml
 </pre></code>
+Visualizes the ground truth from date 2013-01-10 as a kml file 
 
+
+## Examples
+
+## All commands
+
+## Transformation Tree
