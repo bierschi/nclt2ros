@@ -8,7 +8,7 @@ import geometry_msgs.msg
 from sensor_msgs.msg import NavSatStatus, NavSatFix, Imu, MagneticField
 from nav_msgs.msg import Odometry
 from std_msgs.msg import UInt16, Float64
-from src.extractor.raw_data import RawData
+from src.extractor.base_raw_data import BaseRawData
 
 # default COVARIANCE matrices
 IMU_ORIENT_COVAR = [1e-3, 0, 0,
@@ -35,7 +35,7 @@ POSE_COVAR       = [1e-3, 0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0, 1e-3]
 
 
-class RosSensorMsg(RawData):
+class RosSensorMsg(BaseRawData):
     """Class to convert the sensor_data directory to ROS messages
 
     USAGE:
@@ -45,7 +45,7 @@ class RosSensorMsg(RawData):
     def __init__(self, date):
 
         # init base class
-        RawData.__init__(self, date=date)
+        BaseRawData.__init__(self, date=date)
 
         self.tf_broadcast = tf.TransformBroadcaster()
         self.static_transform = tf2_ros.StaticTransformBroadcaster()

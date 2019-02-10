@@ -3,10 +3,10 @@ import numpy as np
 import rospy
 import rosbag
 from sensor_msgs.msg import PointCloud2, PointField
-from src.extractor.raw_data import RawData
+from src.extractor.base_raw_data import BaseRawData
 
 
-class VelodyneData(RawData):
+class VelodyneData(BaseRawData):
     """Class to convert the velodyne binary file to ROS PointCloud2 messages
 
     USAGE:
@@ -16,7 +16,7 @@ class VelodyneData(RawData):
     def __init__(self, date, write_to_bag):
 
         # init base class
-        RawData.__init__(self, date=date)
+        BaseRawData.__init__(self, date=date)
 
         # load velodyne_binary file
         if self.velodyne_data_flag:

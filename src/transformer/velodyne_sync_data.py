@@ -8,10 +8,10 @@ import tf2_msgs.msg
 import tf.transformations
 
 from sensor_msgs.msg import PointCloud2, PointField
-from src.extractor.raw_data import RawData
+from src.extractor.base_raw_data import BaseRawData
 
 
-class VelodyneSyncData(RawData):
+class VelodyneSyncData(BaseRawData):
     """Class to transform the velodyne_sync binary files to ROS PointCloud2 messages
 
     USAGE:
@@ -21,7 +21,7 @@ class VelodyneSyncData(RawData):
     def __init__(self, date, write_to_bag=False):
 
         # init base class
-        RawData.__init__(self, date=date)
+        BaseRawData.__init__(self, date=date)
 
         self.write_to_bag = write_to_bag
 

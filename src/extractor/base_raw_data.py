@@ -3,11 +3,11 @@ import json
 from definitions import ROOT_DIR
 
 
-class RawData:
+class BaseRawData:
     """Base class to initialize the directories for the raw data
 
     USAGE:
-            RawData('2013-01-10')
+            BaseRawData('2013-01-10')
 
     """
     def __init__(self, date):
@@ -73,3 +73,6 @@ class RawData:
         self.rosbag_dir = ROOT_DIR + '/rosbags'
         if not os.path.exists(self.rosbag_dir):
             os.makedirs(self.rosbag_dir)
+
+        # create camera folder settings
+        self.num_cameras = 6

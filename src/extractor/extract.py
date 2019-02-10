@@ -1,6 +1,6 @@
 import os
 import tarfile
-from raw_data import RawData
+from base_raw_data import RawData
 
 
 class Extract(RawData):

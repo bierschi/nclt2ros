@@ -1,18 +1,18 @@
 import rosbag
 import os
-import json
 import subprocess
 import sys
 
-from src.extractor.read_sensor_data import ReadRawData
+from src.extractor.read_sensor_data import ReadSensorData
+from src.extractor.read_ground_truth import ReadGroundTruth
+from src.extractor.read_ground_truth_covariance import ReadGroundTruthCovariance
 from src.transformer.sensor_data import RosSensorMsg
 from src.transformer.hokuyo_data import HokuyoData
 from src.transformer.velodyne_sync_data import VelodyneSyncData
-from src.extractor.raw_data import RawData
-from definitions import ROOT_DIR
+from src.extractor.base_raw_data import BaseRawData
 
 
-class ToRosbag(RawData):
+class ToRosbag(BaseRawData):
     """Class to convert the NCLT Dataset into a rosbag file
 
     USAGE:
@@ -27,10 +27,12 @@ class ToRosbag(RawData):
             raise TypeError('"date" must be of type string')
 
         # init base class
-        RawData.__init__(self, date=self.date)
+        BaseRawData.__init__(self, date=self.date)
 
         # load class instances
-        self.raw_data           = ReadRawData(self.date)
+        self.gt                 = ReadGroundTruth(self.date)
+        self.gt_cov             = ReadGroundTruthCovariance(self.date)
+        self.raw_data           = ReadSensorData(self.date)
         self.ros_sensor_msg     = RosSensorMsg(self.date)
         self.hokuyo_data        = HokuyoData(self.date)
         self.velodyne_sync_data = VelodyneSyncData(self.date)
@@ -41,11 +43,7 @@ class ToRosbag(RawData):
         self.bag_name = str(bag_name)
         self.bag = rosbag.Bag(self.bag_name, 'w')
 
-        # create camera folder settings
-        self.num_cameras = 6
-        self.data_dir = ROOT_DIR + '/raw_data/' + self.date
-        self.images_dir = self.data_dir + '/images/' + '%s' % self.date + '/lb3/'
-
+        # camera topics in rosbag file
         if cam_folder is None:
             self.cam_folder = None
         elif isinstance(cam_folder, str):
@@ -80,8 +78,8 @@ class ToRosbag(RawData):
         print("loading data ...")
 
         # load ground_truth data
-        gt_list       = self.raw_data.read_gt_csv(all_in_one=True)
-        gt_cov_list   = self.raw_data.read_gt_cov_csv(all_in_one=True)
+        gt_list       = self.gt.read_gt_csv(all_in_one=True)
+        gt_cov_list   = self.gt_cov.read_gt_cov_csv(all_in_one=True)
 
         # load sensor data
         gps_list      = self.raw_data.read_gps_csv(all_in_one=True)
@@ -222,12 +220,12 @@ class ToRosbag(RawData):
             elif next_packet == "img":
                 if self.cam_folder is 'all':
                     for camera_id in range(self.num_cameras):
-                        cam_file = os.path.join(self.images_dir, 'Cam' + str(camera_id), str(next_utime) + '.tiff')
+                        cam_file = os.path.join(self.images_lb3_dir, 'Cam' + str(camera_id), str(next_utime) + '.tiff')
                         timestamp, image_msg, tf_static_msg = self.image_data.write_images(utime=next_utime, cam_file=cam_file)
                         self.bag.write(self.json_configs['topics']['ladybug_sensor'] + str(camera_id), image_msg, t=timestamp)
                         self.bag.write('/tf_static', tf_static_msg, t=timestamp)
                 else:
-                    cam_file = os.path.join(self.images_dir, 'Cam' + str(self.cam_folder), str(next_utime) + '.tiff')
+                    cam_file = os.path.join(self.images_lb3_dir, 'Cam' + str(self.cam_folder), str(next_utime) + '.tiff')
                     timestamp, image_msg, tf_static_msg = self.image_data.write_images(utime=next_utime, cam_file=cam_file)
                     self.bag.write(self.json_configs['topics']['ladybug_sensor'] + str(self.cam_folder), image_msg, t=timestamp)
                     self.bag.write('/tf_static', tf_static_msg, t=timestamp)
