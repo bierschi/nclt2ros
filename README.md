@@ -26,7 +26,7 @@ chmod +x nclt2rosbag.py
 
 <pre><code>
 ./nclt2rosbag.py action date<br>
-download &nbsp;&nbsp;: --lb3 --sen --vel --hokuyo --gt --gt_cov <br>
+download &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: --lb3 --sen --vel --hokuyo --gt --gt_cov <br>
 visualize&nbsp;&nbsp;&nbsp: --gt_kml --gt_png --gps_kml --gps_png --gps_rtk_kml --gps_rtk_png --odom_kml --odom_png --all <br>
 convert&nbsp;&nbsp;&nbsp;&nbsp;&nbsp: --bag --cam_folder
 </pre></code>
