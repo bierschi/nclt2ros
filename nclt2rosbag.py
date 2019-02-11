@@ -33,24 +33,22 @@ def main():
     parser.add_argument('--odom_png',    dest='v_odom_png',    action='store_true', help='Visualize wheel odometry as a png file')
     parser.add_argument('--all',         dest='v_all',         action='store_true', help='Visualizes all sensor data as a png file')
 
-    parser.add_argument('--bag',    dest='bag_name', action='append', help='Name of the rosbag file')
+    # arguments for converting
+    parser.add_argument('--bag',        dest='bag_name',   action='append', help='Name of the rosbag file')
     parser.add_argument('--cam_folder', dest='cam_folder', action='append', help='Number between 0 and 5 for camera folder')
     args = parser.parse_args()
 
     if args.action == 'download':
-        print("Download NCLT dataset from %s" % args.date)
         LoadDataset(args=args)  # multiple args could be provided
 
     elif args.action == 'extract':
-        print("Extracting data from %s" % args.date)
         Extract(date=args.date)
 
     elif args.action == 'visualize':
-        Visualize(args=args)
+        Visualize(args=args)    # multiple args could be provided
 
     elif args.action == 'convert':
-        print("Converting data from %s" % args.date)
-        Convert(args=args)
+        Convert(args=args)      # multiple args could be provided
 
 
 if __name__ == '__main__':

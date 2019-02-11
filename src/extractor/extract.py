@@ -1,9 +1,9 @@
 import os
 import tarfile
-from base_raw_data import RawData
+from base_raw_data import BaseRawData
 
 
-class Extract(RawData):
+class Extract(BaseRawData):
     """Class to extract the raw data
 
     USAGE:
@@ -18,7 +18,11 @@ class Extract(RawData):
         else:
             raise TypeError("'date' must be type of string")
 
-        RawData.__init__(self, date=date)
+        print("Extracting data from %s" % self.date)
+
+        # init base class
+        BaseRawData.__init__(self, date=date)
+
         self.extract_data()
 
     def extract_data(self):

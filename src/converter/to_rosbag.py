@@ -3,13 +3,14 @@ import os
 import subprocess
 import sys
 
-from src.extractor.read_sensor_data import ReadSensorData
 from src.extractor.read_ground_truth import ReadGroundTruth
 from src.extractor.read_ground_truth_covariance import ReadGroundTruthCovariance
-from src.transformer.sensor_data import RosSensorMsg
+from src.extractor.read_sensor_data import ReadSensorData
 from src.transformer.hokuyo_data import HokuyoData
 from src.transformer.velodyne_sync_data import VelodyneSyncData
+from src.transformer.image_data import ImageData
 from src.extractor.base_raw_data import BaseRawData
+from src.transformer.sensor_data import RosSensorMsg
 
 
 class ToRosbag(BaseRawData):
@@ -19,29 +20,47 @@ class ToRosbag(BaseRawData):
             ToRosbag('2013-01-10', 'example.bag', cam_folder=None)
 
     """
-    def __init__(self, date, bag_name, cam_folder=None):
+    def __init__(self, date, args, bag_name, cam_folder=None):
 
         if isinstance(date, str):
             self.date = date
         else:
             raise TypeError('"date" must be of type string')
 
+        self.args = args
+
         # init base class
         BaseRawData.__init__(self, date=self.date)
 
-        # load class instances
-        self.gt                 = ReadGroundTruth(self.date)
-        self.gt_cov             = ReadGroundTruthCovariance(self.date)
-        self.raw_data           = ReadSensorData(self.date)
-        self.ros_sensor_msg     = RosSensorMsg(self.date)
-        self.hokuyo_data        = HokuyoData(self.date)
-        self.velodyne_sync_data = VelodyneSyncData(self.date)
-        #self.image_data = TransformImageData(self.date)
+        # load class instances, if available
+        if self.ground_truth_flag and self.args.gt:
+            self.gt = ReadGroundTruth(self.date)
 
-        # create rosbag file
+        if self.ground_truth_covariance_flag and self.args.gt_cov:
+            self.gt_cov = ReadGroundTruthCovariance(self.date)
+
+        if self.sensor_data_flag and self.args.sen:
+            self.raw_data = ReadSensorData(self.date)
+
+        if self.hokuyo_data_flag and self.args.hokuyo:
+            self.hokuyo_data = HokuyoData(self.date)
+
+        if self.velodyne_data_flag and self.args.vel:
+            self.velodyne_sync_data = VelodyneSyncData(self.date)
+
+        if self.images_flag and self.args.lb3:
+            self.image_data = ImageData(self.date)
+
+        # load ros msg converter class
+        self.ros_sensor_msg = RosSensorMsg(self.date)
+
+        # create rosbag file and check name
         os.chdir(self.rosbag_dir)
         self.bag_name = str(bag_name)
-        self.bag = rosbag.Bag(self.bag_name, 'w')
+        if self.bag_name.endswith('.bag'):
+            self.bag = rosbag.Bag(self.bag_name, 'w')
+        else:
+            self.bag = rosbag.Bag(self.bag_name + '.bag', 'w')
 
         # camera topics in rosbag file
         if cam_folder is None:

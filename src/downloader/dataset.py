@@ -13,6 +13,8 @@ class LoadDataset:
 
     def __init__(self, args):
 
+        print("Download NCLT dataset from %s" % args.date)
+
         self.download_url_dir = 'http://robots.engin.umich.edu/nclt'
         self.dates = ['2012-01-08', '2012-01-15', '2012-01-22', '2012-02-02', '2012-02-04', '2012-02-05', '2012-02-12',
                       '2012-02-18', '2012-02-19', '2012-03-17', '2012-03-25', '2012-03-31', '2012-04-29', '2012-05-11',
