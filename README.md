@@ -80,5 +80,5 @@ Visualizes the ground truth from date 2013-01-10 as a kml file
 
 <div align="left">
   <br>
-  <img src="tf_tree/nclt_tf_tree.png" alt="example" width="1481" height="277">
+  <img src="tf_tree/nclt_tf_tree.png" alt="example" width="988" height="185">
 </div>
