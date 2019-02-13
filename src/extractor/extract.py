@@ -42,7 +42,7 @@ class Extract(BaseRawData):
                         tar.extractall()
                         tar.close()
             else:
-                print("hokuyo_data already exist")
+                print("hokuyo_data already exists")
 
         # check sensor_data
         if os.path.exists(self.sensor_data_dir):
@@ -56,7 +56,7 @@ class Extract(BaseRawData):
                         tar.extractall()
                         tar.close()
             else:
-                print("sensor_data already exist")
+                print("sensor_data already exists")
 
         # check velodyne data
         if os.path.exists(self.velodyne_data_dir):
@@ -70,7 +70,7 @@ class Extract(BaseRawData):
                         tar.extractall()
                         tar.close()
             else:
-                print("velodyne_data already exist")
+                print("velodyne_data already exists")
 
         # check image data
         if os.path.exists(self.images_dir):
@@ -84,4 +84,4 @@ class Extract(BaseRawData):
                         tar.extractall()
                         tar.close()
             else:
-                print("image_data already exist")
+                print("image_data already exists")

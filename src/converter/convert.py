@@ -12,7 +12,15 @@ class Convert:
 
         self.args = args
         self.date = args.date
-        self.cam_folder = args.cam_folder
+
+        # check cam_folder argument
+        if args.cam_folder is not None:
+            if 'all' in args.cam_folder:
+                self.cam_folder = 'all'
+            else:
+                self.cam_folder = int(args.cam_folder[0])
+        else:
+            self.cam_folder = None
 
         print("Converting data from %s" % self.date)
 
@@ -31,11 +39,9 @@ class Convert:
             self.args.sen    = True
             self.args.vel    = True
             self.args.lb3    = True
-            converter = ToRosbag(date=self.date, args=self.args, bag_name=self.bag_name)
+            converter = ToRosbag(date=self.date, args=self.args, bag_name=self.bag_name, cam_folder=self.cam_folder)
         else:
-            if self.cam_folder is None:
-                converter = ToRosbag(date=self.date, args=self.args, bag_name=self.bag_name)
-            else:
-                converter = ToRosbag(date=self.date, args=self.args, bag_name=self.bag_name, cam_folder=int(self.cam_folder))
+            converter = ToRosbag(date=self.date, args=self.args, bag_name=self.bag_name, cam_folder=self.cam_folder)
+
 
         converter.process()

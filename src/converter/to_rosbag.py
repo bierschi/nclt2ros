@@ -35,9 +35,10 @@ class ToRosbag(BaseRawData):
         # load class instances, if available
         if self.ground_truth_flag and self.args.gt:
             self.gt = ReadGroundTruth(self.date)
-
-        if self.ground_truth_covariance_flag and self.args.gt_cov:
-            self.gt_cov = ReadGroundTruthCovariance(self.date)
+            if self.ground_truth_covariance_flag:
+                self.gt_cov = ReadGroundTruthCovariance(self.date)
+            else:
+                raise TypeError('No ground_truth_covariance directory available, please check!')
 
         if self.sensor_data_flag and self.args.sen:
             self.raw_data = ReadSensorData(self.date)
@@ -49,7 +50,17 @@ class ToRosbag(BaseRawData):
             self.velodyne_sync_data = VelodyneSyncData(self.date)
 
         if self.images_flag and self.args.lb3:
+
+            # create instance
             self.image_data = ImageData(self.date)
+
+            # check cam_folder argument
+            if cam_folder is None:
+                self.cam_folder = 5
+            else:
+                self.cam_folder = cam_folder
+        else:
+            self.cam_folder = None
 
         # load ros msg converter class
         self.ros_sensor_msg = RosSensorMsg(self.date)
@@ -63,6 +74,9 @@ class ToRosbag(BaseRawData):
             self.bag = rosbag.Bag(self.bag_name + '.bag', 'w')
 
         # camera topics in rosbag file
+        """
+        
+       
         if cam_folder is None:
             self.cam_folder = None
         elif isinstance(cam_folder, str):
@@ -74,6 +88,8 @@ class ToRosbag(BaseRawData):
                 raise ValueError("camera_topics must be between 0 and 5")
         else:
             raise TypeError("camera_topics must be a integer")
+
+        """
 
     def __del__(self):
         """destructor
@@ -97,27 +113,31 @@ class ToRosbag(BaseRawData):
         print("loading data ...")
 
         # load ground_truth data
-        gt_list       = self.gt.read_gt_csv(all_in_one=True)
-        gt_cov_list   = self.gt_cov.read_gt_cov_csv(all_in_one=True)
+        if self.args.gt:
+            gt_list       = self.gt.read_gt_csv(all_in_one=True)
+            gt_cov_list   = self.gt_cov.read_gt_cov_csv(all_in_one=True)
 
         # load sensor data
-        gps_list      = self.raw_data.read_gps_csv(all_in_one=True)
-        gps_rtk_list  = self.raw_data.read_gps_rtk_csv(all_in_one=True)
-        ms25_list     = self.raw_data.read_ms25_csv(all_in_one=True)
-        odom_list     = self.raw_data.read_odometry_mu_100hz_csv(all_in_one=True)
-        odom_cov_list = self.raw_data.read_odometry_cov_100hz_csv(all_in_one=True)
-        wheels_list   = self.raw_data.read_wheels_csv(all_in_one=True)
-        kvh_list      = self.raw_data.read_kvh_csv(all_in_one=True)
+        if self.args.sen:
+            gps_list      = self.raw_data.read_gps_csv(all_in_one=True)
+            gps_rtk_list  = self.raw_data.read_gps_rtk_csv(all_in_one=True)
+            ms25_list     = self.raw_data.read_ms25_csv(all_in_one=True)
+            odom_list     = self.raw_data.read_odometry_mu_100hz_csv(all_in_one=True)
+            odom_cov_list = self.raw_data.read_odometry_cov_100hz_csv(all_in_one=True)
+            wheels_list   = self.raw_data.read_wheels_csv(all_in_one=True)
+            kvh_list      = self.raw_data.read_kvh_csv(all_in_one=True)
 
         # load hokuyo data
-        utime_hok4, data_hok4   = self.hokuyo_data.read_next_hokuyo_4m_packet()
-        utime_hok30, data_hok30 = self.hokuyo_data.read_next_hokuyo_30m_packet()
+        if self.args.hokuyo:
+            utime_hok4, data_hok4   = self.hokuyo_data.read_next_hokuyo_4m_packet()
+            utime_hok30, data_hok30 = self.hokuyo_data.read_next_hokuyo_30m_packet()
 
         # load velodyne sync data
-        vel_sync_timestamps_microsec, vel_sync_bin_files = self.velodyne_sync_data.get_velodyne_sync_timestamps_and_files()
+        if self.args.vel:
+            vel_sync_timestamps_microsec, vel_sync_bin_files = self.velodyne_sync_data.get_velodyne_sync_timestamps_and_files()
 
         # load image data
-        if self.cam_folder is not None:
+        if self.cam_folder is not None and self.args.lb3:
             images_timestamps_microsec = self.image_data.get_image_timestamps()
 
         print("loaded data, writing to rosbag ...")
@@ -129,37 +149,41 @@ class ToRosbag(BaseRawData):
             next_packet = "done"
             next_utime = -1
 
-            if i_gps < len(gps_list) and (gps_list[i_gps, 0] < next_utime or next_utime < 0):
-                next_utime = gps_list[i_gps, 0]
-                next_packet = "gps"
+            if self.args.gt:
+                if i_gt < len(gt_list) and (gt_list[i_gt, 0] < next_utime or next_utime < 0):
+                    next_utime = gt_list[i_gt, 0]
+                    next_packet = "gt"
 
-            if i_gps_rtk < len(gps_rtk_list) and (gps_rtk_list[i_gps_rtk, 0] < next_utime or next_utime < 0):
-                next_utime = gps_rtk_list[i_gps_rtk, 0]
-                next_packet = "gps_rtk"
+            if self.args.sen:
+                if i_gps < len(gps_list) and (gps_list[i_gps, 0] < next_utime or next_utime < 0):
+                    next_utime = gps_list[i_gps, 0]
+                    next_packet = "gps"
 
-            if i_ms25 < len(ms25_list) and (ms25_list[i_ms25, 0] < next_utime or next_utime < 0):
-                next_utime = ms25_list[i_ms25, 0]
-                next_packet = "ms25"
+                if i_gps_rtk < len(gps_rtk_list) and (gps_rtk_list[i_gps_rtk, 0] < next_utime or next_utime < 0):
+                    next_utime = gps_rtk_list[i_gps_rtk, 0]
+                    next_packet = "gps_rtk"
 
-            if i_gt < len(gt_list) and (gt_list[i_gt, 0] < next_utime or next_utime < 0):
-                next_utime = gt_list[i_gt, 0]
-                next_packet = "gt"
+                if i_ms25 < len(ms25_list) and (ms25_list[i_ms25, 0] < next_utime or next_utime < 0):
+                    next_utime = ms25_list[i_ms25, 0]
+                    next_packet = "ms25"
 
-            if i_odom < len(odom_list) and (odom_list[i_odom, 0] < next_utime or next_utime < 0):
-                next_utime = odom_list[i_odom, 0]
-                next_packet = "odom"
+                if i_odom < len(odom_list) and (odom_list[i_odom, 0] < next_utime or next_utime < 0):
+                    next_utime = odom_list[i_odom, 0]
+                    next_packet = "odom"
 
-            if utime_hok4 > 0 and (utime_hok4 < next_utime or next_utime < 0):
-                next_packet = "hok4"
+            if self.args.hokuyo:
+                if utime_hok4 > 0 and (utime_hok4 < next_utime or next_utime < 0):
+                    next_packet = "hok4"
 
-            if utime_hok30 > 0 and (utime_hok30 < next_utime or next_utime < 0):
-                next_packet = "hok30"
+                if utime_hok30 > 0 and (utime_hok30 < next_utime or next_utime < 0):
+                    next_packet = "hok30"
 
-            if i_vel < len(vel_sync_timestamps_microsec) and (vel_sync_timestamps_microsec[i_vel] < next_utime or next_utime < 0):
-                next_utime = vel_sync_timestamps_microsec[i_vel]
-                next_packet = "vel_sync"
+            if self.args.vel:
+                if i_vel < len(vel_sync_timestamps_microsec) and (vel_sync_timestamps_microsec[i_vel] < next_utime or next_utime < 0):
+                    next_utime = vel_sync_timestamps_microsec[i_vel]
+                    next_packet = "vel_sync"
 
-            if self.cam_folder is not None:
+            if self.cam_folder is not None and self.args.lb3:
                 if i_img < len(images_timestamps_microsec) and (images_timestamps_microsec[i_img] < next_utime or next_utime < 0):
                     next_utime = images_timestamps_microsec[i_img]
                     next_packet = "img"

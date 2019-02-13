@@ -24,7 +24,7 @@ class ImageData(BaseRawData):
         # init base class
         BaseRawData.__init__(self, date=date)
 
-        self.num_cameras = 6
+        # create a cv bridge
         self.bridge = cv_bridge.CvBridge()
 
         if write_to_bag:
@@ -35,8 +35,8 @@ class ImageData(BaseRawData):
 
         :return: timestamps_microsec, list containing the sorted timestamps
         """
-
-        files = os.listdir(self.images_dir + 'Cam0')
+        # same timestamps in all folders
+        files = os.listdir(self.images_lb3_dir + 'Cam0')
 
         timestamps_microsec = sorted([long(os.path.splitext(f)[0]) for f in files if f.endswith('.tiff')])
 
@@ -47,6 +47,7 @@ class ImageData(BaseRawData):
 
         :return: timestamp: ros time object
                  image_msg: ROS image msg
+                 tf_static_msg: static transformation
         """
 
         # create ros timestamp
