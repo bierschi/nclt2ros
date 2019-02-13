@@ -77,6 +77,8 @@ Visualizes the ground truth from date 2013-01-10 as a kml file
 
 
 ## Transformation Tree
+<code>frame_id</code> and <code>topic_name</code> can be changed with the json configuration file 
+<code>configuration.json</code> in folder <code>/cfg</code>
 
 <div align="left">
   <br>
