@@ -15,13 +15,11 @@ the data from [The University of Michigan North Campus Long-Term Vision and LIDA
 
 #### Table of Contents:
 
-- [Examples](https://github.com/bierschi/nclt2rosbag#examples)
 - [Usage](https://github.com/bierschi/nclt2rosbag#usage)
-- [All commands](https://github.com/bierschi/nclt2rosbag#all-commands)
+- [Examples](https://github.com/bierschi/nclt2rosbag#examples)
 - [Transformation tree](https://github.com/bierschi/nclt2rosbag#transformation-tree)
 
 
-## Examples
 
 
 
@@ -37,7 +35,7 @@ chmod +x nclt2rosbag.py
 ./nclt2rosbag.py action date<br><br>
 download &nbsp;&nbsp;&nbsp;: --lb3 --sen --vel --hokuyo --gt --gt_cov <br>
 visualize&nbsp;&nbsp;&nbsp: --gt_kml --gt_png --gps_kml --gps_png --gps_rtk_kml --gps_rtk_png --odom_kml --odom_png --all <br>
-convert&nbsp;&nbsp;&nbsp;&nbsp;&nbsp: --bag --cam_folder
+convert&nbsp;&nbsp;&nbsp;&nbsp;&nbsp: --lb3 --sen --vel --hokuyo --gt --bag --cam_folder
 </pre></code>
 <br>
 The positional arguments <code>action</code> and <code>date</code> are mandatory. Indicate an action command (download, extract, convert, visualize). 
@@ -57,13 +55,14 @@ Downloads the <code>Ground Truth Pose</code>, <code>Ground Truth Covariance</cod
 <pre><code>
 ./nclt2rosbag.py extract 2013-01-10
 </pre></code>
-Extracts the tarballs, if available, in folder date named <code>2013-01-10</code>
+Extracts the hokuyo, images, sensors and velodyne tarballs , if available, in folder date named <code>2013-01-10</code>
 
 #### convert
 
 <pre><code>
-./nclt2rosbag.py convert 2013-01-10 
+./nclt2rosbag.py convert 2013-01-10 --bag nclt --cam_folder 5
 </pre></code>
+Converts the dataset from <code>2013-01-10</code> in bag file <code>nclt.bag</code>, containing only images from cam folder 5 
 
 #### visualize
 
@@ -73,8 +72,8 @@ Extracts the tarballs, if available, in folder date named <code>2013-01-10</code
 Visualizes the ground truth from date 2013-01-10 as a kml file 
 
 
+## Examples
 
 
-## All commands
 
 ## Transformation Tree
