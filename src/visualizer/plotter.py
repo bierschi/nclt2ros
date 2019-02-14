@@ -2,6 +2,7 @@ import os
 import simplekml
 from definitions import ROOT_DIR
 from src.extractor.read_sensor_data import ReadSensorData
+from src.extractor.read_ground_truth import ReadGroundTruth
 
 
 class Plotter:
@@ -14,7 +15,8 @@ class Plotter:
     def __init__(self, date):
 
         if isinstance(date, str):
-            self.reader = ReadSensorData(date=date)
+            self.reader    = ReadSensorData(date=date)
+            self.reader_gt = ReadGroundTruth(date=date)
         else:
             raise TypeError('"date" must be of type string')
 

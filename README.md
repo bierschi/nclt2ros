@@ -74,6 +74,22 @@ Visualizes the ground truth from date 2013-01-10 as a kml file
 
 ## Examples
 
+<pre><code>
+./nclt2rosbag.py visualize 2013-01-10 --all
+</pre></code>
+
+<div align="left">
+  <br>
+  <img src="examples/nclt_all_png.png" alt="example" width="400" height="300">
+</div>
+
+<br>
+visualized all data as a kml file:
+
+<div align="left">
+  <br>
+  <img src="examples/nclt_all_kml.png" alt="example" width="673" height="375">
+</div>
 
 
 ## Transformation Tree

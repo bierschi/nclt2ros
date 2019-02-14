@@ -24,7 +24,7 @@ class GroundTruth(Plotter):
         self.gt_converter = CoordinateFrame(origin='gt')
 
         # load gt data
-        self.utimes, self.x, self.y, self.z, self.roll_rad, self.pitch_rad, self.yaw_rad = self.reader.read_gt_csv()
+        self.utimes, self.x, self.y, self.z, self.roll_rad, self.pitch_rad, self.yaw_rad = self.reader_gt.read_gt_csv()
 
     def save_kml_line(self):
         """visualize the ground truth as a kml file
