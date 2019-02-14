@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
-from src.downloader.dataset import LoadDataset
+from src.downloader.download import Download
 from src.extractor.extract import Extract
 from src.converter.convert import Convert
 from src.visualizer.visualize import Visualize
@@ -40,16 +40,16 @@ def main():
     args = parser.parse_args()
 
     if args.action == 'download':
-        LoadDataset(args=args)  # multiple args could be provided
+        Download(args=args)   # multiple args could be provided
 
     elif args.action == 'extract':
-        Extract(date=args.date)
+        Extract(date=args.date)  # only one argument are necessary
 
     elif args.action == 'visualize':
-        Visualize(args=args)    # multiple args could be provided
+        Visualize(args=args)     # multiple args could be provided
 
     elif args.action == 'convert':
-        Convert(args=args)      # multiple args could be provided
+        Convert(args=args)       # multiple args could be provided
 
 
 if __name__ == '__main__':

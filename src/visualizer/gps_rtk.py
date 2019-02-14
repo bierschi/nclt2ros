@@ -82,8 +82,3 @@ class GPS_RTK(Plotter):
 
         plt.show()
 
-
-if __name__ == '__main__':
-    gps = GPS_RTK('2013-01-10')
-    #gps.save_kml_line()
-    gps.save_gps_rtk_png()

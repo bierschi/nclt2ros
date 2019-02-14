@@ -46,8 +46,3 @@ class AllSensors(Plotter, GroundTruth, GPS_RTK, GPS, WheelOdom):
         plt.savefig(self.visualization_png_all_dir + 'raw_data_all.png')
 
         plt.show()
-
-
-if __name__ == '__main__':
-    all = AllSensors('2013-01-10')
-    all.plot()

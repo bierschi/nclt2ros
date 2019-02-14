@@ -47,6 +47,7 @@ class RosSensorMsg(BaseRawData):
         # init base class
         BaseRawData.__init__(self, date=date)
 
+        # create transformer
         self.tf_broadcast = tf.TransformBroadcaster()
         self.static_transform = tf2_ros.StaticTransformBroadcaster()
 
@@ -76,7 +77,7 @@ class RosSensorMsg(BaseRawData):
         mode      = gps_list[i, 1]
         num_satss = gps_list[i, 2]
         lat       = gps_list[i, 3]
-        lon       = gps_list[i, 4]
+        lng       = gps_list[i, 4]
         alt       = gps_list[i, 5]
         track_raw = gps_list[i, 6]
         speed_raw = gps_list[i, 7]
@@ -107,7 +108,7 @@ class RosSensorMsg(BaseRawData):
         navsat.status = status
 
         navsat.latitude = np.rad2deg(lat)
-        navsat.longitude = np.rad2deg(lon)
+        navsat.longitude = np.rad2deg(lng)
         navsat.altitude = alt
 
         navsat.position_covariance = NAVSAT_COVAR
@@ -154,7 +155,7 @@ class RosSensorMsg(BaseRawData):
         mode      = gps_rtk_list[i, 1]
         num_satss = gps_rtk_list[i, 2]
         lat       = gps_rtk_list[i, 3]
-        lon       = gps_rtk_list[i, 4]
+        lng       = gps_rtk_list[i, 4]
         alt       = gps_rtk_list[i, 5]
         track_raw = gps_rtk_list[i, 6]
         speed_raw = gps_rtk_list[i, 7]
@@ -185,7 +186,7 @@ class RosSensorMsg(BaseRawData):
         navsat.status = status
 
         navsat.latitude = np.rad2deg(lat)
-        navsat.longitude = np.rad2deg(lon)
+        navsat.longitude = np.rad2deg(lng)
         navsat.altitude = alt
 
         navsat.position_covariance = NAVSAT_COVAR
@@ -503,9 +504,9 @@ class RosSensorMsg(BaseRawData):
         # odom.child_frame_id = 'base_link'
 
         # change due to the ENU frame
-        gt.pose.pose.position.x = y - 107.724666286     # x
-        gt.pose.pose.position.y = x - 75.829339527800   # y
-        gt.pose.pose.position.z = -z  # z
+        gt.pose.pose.position.x = y - 107.724666286       # x # TODO not hardcoding
+        gt.pose.pose.position.y = x - 75.829339527800     # y
+        gt.pose.pose.position.z = -z + 3.272894625813646  # z
 
         # create quaternion from euler angles
         quaternion = tf.transformations.quaternion_from_euler(roll_rad, pitch_rad, yaw_rad)

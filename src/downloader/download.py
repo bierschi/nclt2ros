@@ -3,11 +3,11 @@ import subprocess
 from definitions import ROOT_DIR
 
 
-class LoadDataset:
+class Download:
     """Class to download the NCLT Dataset from http://robots.engin.umich.edu/nclt/
 
     USAGE:
-            Dataset(args=args)
+            Download(args=args)
 
     """
 
@@ -31,11 +31,11 @@ class LoadDataset:
         self.saved_path = None
 
         if self.check_date(self.date):
-            self.load_data()
+            self.load_dataset()
         else:
             raise ValueError("Given 'Date' is not in dataset")
 
-    def load_data(self):
+    def load_dataset(self):
         """
         load data depending on the arguments specified in the argument parser
         """

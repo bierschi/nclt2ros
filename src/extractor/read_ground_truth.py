@@ -20,6 +20,7 @@ class ReadGroundTruth(BaseRawData):
                  else
                  each column seperated as utimes, x, y, z, roll_rad, pitch_rad, yaw_rad
         """
+
         if self.ground_truth_flag:
 
             gt = np.loadtxt(self.ground_truth_dir + '/groundtruth_%s.csv' % self.date, delimiter=",")

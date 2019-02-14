@@ -1,7 +1,6 @@
 import struct
 import numpy as np
 import rospy
-import rosbag
 import geometry_msgs.msg
 import tf2_msgs.msg
 import tf.transformations
@@ -14,10 +13,10 @@ class HokuyoData(BaseRawData):
     """Class to transform the hokuyo binary data to ROS LaserScan messages
 
     USAGE:
-            HokuyoData('2013-01-10', write_to_bag=False)
+            HokuyoData('2013-01-10')
 
     """
-    def __init__(self, date, write_to_bag=False):
+    def __init__(self, date):
 
         # init base class
         BaseRawData.__init__(self, date=date)
@@ -28,11 +27,6 @@ class HokuyoData(BaseRawData):
             self.f_bin_hokuyo_30m = open(self.hokuyo_data_dir + '/%s/hokuyo_30m.bin' % self.date, 'r')
         else:
             raise ValueError('hokuyo_data directory not exists')
-
-        self.write_to_bag = write_to_bag
-
-        if self.write_to_bag is True:
-            self.bag = rosbag.Bag('hokuyo.bag', 'w')
 
     def __del__(self):
         """destructor"""

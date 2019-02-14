@@ -81,8 +81,3 @@ class GPS(Plotter):
 
         plt.show()
 
-
-if __name__ == '__main__':
-    gps = GPS('2013-01-10')
-    #gps.save_kml_line()
-    gps.save_gps_png()

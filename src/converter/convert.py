@@ -24,6 +24,7 @@ class Convert:
 
         print("Converting data from %s" % self.date)
 
+        # check if bag name is valid
         try:
             self.bag_name = self.args.bag_name[0]
 
@@ -42,6 +43,5 @@ class Convert:
             converter = ToRosbag(date=self.date, args=self.args, bag_name=self.bag_name, cam_folder=self.cam_folder)
         else:
             converter = ToRosbag(date=self.date, args=self.args, bag_name=self.bag_name, cam_folder=self.cam_folder)
-
 
         converter.process()

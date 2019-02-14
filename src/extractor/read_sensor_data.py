@@ -18,7 +18,7 @@ class ReadSensorData(BaseRawData):
         :param   all_in_one: Boolean
         :return: ndarray: containing all data, if all_in_one is True
                  else
-                 each column seperated as utimes, modes, num_satss, lat, long, alts, tracks, speeds
+                 each column seperated as utimes, modes, num_satss, lat, lng, alts, tracks, speeds
         """
         if self.sensor_data_flag:
 
@@ -34,12 +34,12 @@ class ReadSensorData(BaseRawData):
                 modes     = gps[:, 1]
                 num_satss = gps[:, 2]
                 lat       = gps[:, 3]
-                long      = gps[:, 4]
+                lng       = gps[:, 4]
                 alts      = gps[:, 5]
                 tracks    = gps[:, 6]
                 speeds    = gps[:, 7]
 
-                return utimes, modes, num_satss, lat, long, alts, tracks, speeds
+                return utimes, modes, num_satss, lat, lng, alts, tracks, speeds
         else:
             raise ValueError('no sensor_data directory available')
 
@@ -49,7 +49,7 @@ class ReadSensorData(BaseRawData):
         :param   all_in_one: Boolean
         :return: ndarray: containing all data, if all_in_one is True
                  else
-                 each column seperated as utimes, modes, num_satss, lat, long, alts, tracks, speeds
+                 each column seperated as utimes, modes, num_satss, lat, lng, alts, tracks, speeds
         """
         if self.sensor_data_flag:
 
@@ -65,12 +65,12 @@ class ReadSensorData(BaseRawData):
                 modes     = gps_rtk[:, 1]
                 num_satss = gps_rtk[:, 2]
                 lat       = gps_rtk[:, 3]
-                long      = gps_rtk[:, 4]
+                lng       = gps_rtk[:, 4]
                 alts      = gps_rtk[:, 5]
                 tracks    = gps_rtk[:, 6]
                 speeds    = gps_rtk[:, 7]
 
-                return utimes, modes, num_satss, lat, long, alts, tracks, speeds
+                return utimes, modes, num_satss, lat, lng, alts, tracks, speeds
 
         else:
             raise ValueError('no sensor_data directory available')
@@ -190,12 +190,38 @@ class ReadSensorData(BaseRawData):
         else:
             raise ValueError('no sensor_data directory available')
 
-    def read_odometry_cov_csv(self):
-        # TODO odometry_cov.csv
-        pass
+    def read_odometry_cov_csv(self, all_in_one=None):
+        """reads the data in the odometry_cov csv file
+
+        :param all_in_one: Boolean
+        :return: ndarray: containing all data, if all_in_one is True
+                 else
+                 each column seperated as utimes and the upper diagonal of the covariance matrix (row major)
+        """
+        if self.sensor_data_flag:
+
+            odom_cov = np.loadtxt(self.sensor_data_dir + '/%s/odometry_cov.csv' % self.date, delimiter=",")
+
+            if all_in_one is True:
+
+                return odom_cov
+
+            else:
+                utimes = odom_cov[:, 0]
+
+                xx = odom_cov[:, 1]; xy = odom_cov[:, 2]; xz = odom_cov[:, 3]; xr = odom_cov[:, 4]; xp = odom_cov[:, 5]; xh = odom_cov[:, 6]
+                yy = odom_cov[:, 7]; yz = odom_cov[:, 8]; yr = odom_cov[:, 9]; yp = odom_cov[:, 10]; yh = odom_cov[:, 11]
+                zz = odom_cov[:, 12]; zr = odom_cov[:, 13]; zp = odom_cov[:, 14]; zh = odom_cov[:, 15]
+                rr = odom_cov[:, 16]; rp = odom_cov[:, 17]; rh = odom_cov[:, 18]
+                pp = odom_cov[:, 19]; ph = odom_cov[:, 20]
+                hh = odom_cov[:, 21]
+
+                return utimes, xx, xy, xz, xr, xp, xh, yy, yz, yr, yp, yh, zz, zr, zp, zh, rr, rp, rh, pp, ph, hh
+        else:
+            raise ValueError('no sensor_data directory available')
 
     def read_odometry_cov_100hz_csv(self, all_in_one=None):
-        """reads the data in the odometry_mu_100hz csv file
+        """reads the data in the odometry_cov_100hz csv file
 
         :param all_in_one: Boolean
         :return: ndarray: containing all data, if all_in_one is True
@@ -226,9 +252,35 @@ class ReadSensorData(BaseRawData):
         else:
             raise ValueError('no sensor_data directory available')
 
-    def read_odometry_mu_csv(self):
-        # TODO odometry_mu.csv
-        pass
+    def read_odometry_mu_csv(self, all_in_one=None):
+        """reads the data in the odometry_mu_100hz csv file
+
+        :param all_in_one: Boolean
+        :return: ndarray: containing all data, if all_in_one is True
+                 else
+                 each column seperated as utimes, x, y, z, roll, pitch, heading
+        """
+        if self.sensor_data_flag:
+
+            odom = np.loadtxt(self.sensor_data_dir + '/%s/odometry_mu.csv' % self.date, delimiter=",")
+
+            if all_in_one is True:
+
+                return odom
+
+            else:
+
+                utimes  = odom[:, 0]
+                x       = odom[:, 1]
+                y       = odom[:, 2]
+                z       = odom[:, 3]
+                roll    = odom[:, 4]
+                pitch   = odom[:, 5]
+                heading = odom[:, 6]
+
+                return utimes, x, y, z, roll, pitch, heading
+        else:
+            raise ValueError('no sensor_data directory available')
 
     def read_odometry_mu_100hz_csv(self, all_in_one=None):
         """reads the data in the odometry_mu_100hz csv file
@@ -287,6 +339,3 @@ class ReadSensorData(BaseRawData):
         else:
             raise ValueError('no sensor_data directory available')
 
-
-if __name__ == '__main__':
-    rw = ReadSensorData('2013-01-10')

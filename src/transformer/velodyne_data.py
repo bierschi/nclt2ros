@@ -1,7 +1,7 @@
 import struct
 import numpy as np
 import rospy
-import rosbag
+
 from sensor_msgs.msg import PointCloud2, PointField
 from src.extractor.base_raw_data import BaseRawData
 
@@ -13,7 +13,7 @@ class VelodyneData(BaseRawData):
             VelodyneData('2013-01-10')
 
     """
-    def __init__(self, date, write_to_bag):
+    def __init__(self, date):
 
         # init base class
         BaseRawData.__init__(self, date=date)
@@ -23,11 +23,6 @@ class VelodyneData(BaseRawData):
             self.f_bin_velodyne   = open(self.velodyne_data_dir + '/%s/velodyne_hits.bin' % self.date, 'r')
         else:
             raise ValueError('velodyne_data directory not exists')
-
-        self.write_to_bag = write_to_bag
-
-        if self.write_to_bag is True:
-            self.bag = rosbag.Bag('velodyne.bag', 'w')
 
     def verify_magic(self, s):
         """verifies the binary data

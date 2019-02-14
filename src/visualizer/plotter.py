@@ -5,7 +5,7 @@ from src.extractor.read_sensor_data import ReadSensorData
 
 
 class Plotter:
-    """Base class
+    """Base class for visualizing
 
     USAGE:
             Plotter('2013-01-10')

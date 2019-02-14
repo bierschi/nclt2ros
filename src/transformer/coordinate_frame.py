@@ -110,11 +110,3 @@ class CoordinateFrame:
         """
 
         return self.alt_origin - alt
-
-
-if __name__ == '__main__':
-    cofr = CoordinateFrame(origin='gt')
-    print(cofr.get_lat(x=0))
-    print(cofr.get_lon(y=0))
-    print(cofr.get_x(lat=42.2936096617))
-    print(cofr.get_y(lon=-83.6885507601))

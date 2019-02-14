@@ -4,7 +4,7 @@ from base_raw_data import BaseRawData
 
 
 class Extract(BaseRawData):
-    """Class to extract the raw data
+    """Class to extract the tarballs in raw data
 
     USAGE:
             ExtractRawData('2013-01-10')

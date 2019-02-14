@@ -73,24 +73,6 @@ class ToRosbag(BaseRawData):
         else:
             self.bag = rosbag.Bag(self.bag_name + '.bag', 'w')
 
-        # camera topics in rosbag file
-        """
-        
-       
-        if cam_folder is None:
-            self.cam_folder = None
-        elif isinstance(cam_folder, str):
-            self.cam_folder = 'all'
-        elif isinstance(cam_folder, int):
-            if (cam_folder >= 0) and (cam_folder < 6):
-                self.cam_folder = cam_folder
-            else:
-                raise ValueError("camera_topics must be between 0 and 5")
-        else:
-            raise TypeError("camera_topics must be a integer")
-
-        """
-
     def __del__(self):
         """destructor
         """
@@ -324,9 +306,3 @@ class ToRosbag(BaseRawData):
 
         except Exception as e:
             print(e)
-
-
-if __name__ == '__main__':
-    dtr = ToRosbag('2013-01-10', 'test3.bag')
-    dtr.process()
-    #dtr.compress_bag()

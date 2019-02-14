@@ -20,6 +20,7 @@ class ReadGroundTruthCovariance(BaseRawData):
                  else
                  each column seperated as utimes and covariance matrice ...
         """
+
         if self.ground_truth_covariance_flag:
 
             gt_cov = np.loadtxt(self.ground_truth_covariance_dir + '/cov_%s.csv' % self.date, delimiter=",")

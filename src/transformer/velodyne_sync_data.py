@@ -1,4 +1,3 @@
-import rosbag
 import rospy
 import struct
 import os
@@ -15,18 +14,13 @@ class VelodyneSyncData(BaseRawData):
     """Class to transform the velodyne_sync binary files to ROS PointCloud2 messages
 
     USAGE:
-            VelodyneSyncData('2013-01-10', write_to_bag=False)
+            VelodyneSyncData('2013-01-10')
 
     """
-    def __init__(self, date, write_to_bag=False):
+    def __init__(self, date):
 
         # init base class
         BaseRawData.__init__(self, date=date)
-
-        self.write_to_bag = write_to_bag
-
-        if self.write_to_bag is True:
-            self.bag = rosbag.Bag('velodyne_bag', 'w')
 
     def get_velodyne_sync_timestamps_and_files(self):
         """returns the timestamps and binary files in a sorted manner

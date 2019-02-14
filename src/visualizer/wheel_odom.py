@@ -78,8 +78,3 @@ class WheelOdom(Plotter):
 
         plt.show()
 
-
-if __name__ == '__main__':
-    wodom = WheelOdom('2013-01-10')
-    #wodom.save_kml_line()
-    wodom.save_wheel_odom_png()

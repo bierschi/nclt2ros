@@ -142,12 +142,3 @@ class GroundTruth(Plotter):
         plt.title('Yaw angle from Ground Truth')
         plt.savefig(self.visualization_png_gt_dir + self.output_file + '_yaw.png')
         plt.show()
-
-
-if __name__ == '__main__':
-    gt = GroundTruth('2013-01-10')
-    #gt.save_kml_line()
-    gt.save_gt_png(offset=True)
-    #gt.save_roll_png()
-    #gt.save_pitch_png()
-    #gt.save_yaw_png()

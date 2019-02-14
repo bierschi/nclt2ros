@@ -1,6 +1,5 @@
 import os
 import rospy
-import rosbag
 import numpy as np
 import cv2
 import cv_bridge
@@ -16,19 +15,16 @@ class ImageData(BaseRawData):
     """Class to transform the images from the ladybug camera
 
     USAGE:
-            ImageData('2013-01-10', write_to_bag=False)
+            ImageData('2013-01-10')
 
     """
-    def __init__(self, date, write_to_bag=False):
+    def __init__(self, date):
 
         # init base class
         BaseRawData.__init__(self, date=date)
 
         # create a cv bridge
         self.bridge = cv_bridge.CvBridge()
-
-        if write_to_bag:
-            self.bag = rosbag.Bag('image_bag', 'w')
 
     def get_image_timestamps(self):
         """returns the image timestamps in a sorted manner
@@ -91,7 +87,7 @@ class ImageData(BaseRawData):
         """
 
         files = sorted(os.listdir(self.images_dir + 'Cam' + str(cam_nr)))
-        os.chdir(self.images_dir + 'Cam2')
+        os.chdir(self.images_dir + 'Cam' + str(cam_nr))
         for f in files:
             im = pilImage.open(f)
             im_array = np.array(im)
@@ -99,18 +95,3 @@ class ImageData(BaseRawData):
             im = pilImage.fromarray(im_array)
             im.show()
             raw_input("Please press enter...")
-
-    def images_to_bag(self):
-
-        timestamps = self.get_image_timestamps()
-
-        for (i, utime) in enumerate(timestamps):
-
-            for camera_id in range(self.num_cameras):
-                cam_file = os.path.join(self.images_dir, 'Cam' + str(camera_id), str(utime) + '.tiff')
-                cv_img = cv2.imread(cam_file)
-                cv_img = cv2.rotate(cv_img, rotateCode=0)  # 90 deg
-                img_msg = self.bridge.cv2_to_imgmsg(cv_img, encoding="bgr8")
-                rostime = rospy.Time.from_sec(utime / 1e6)
-
-                self.bag.write(self.json_configs['topics']['ladybug_sensor'] + str(camera_id), img_msg, t=rostime)
