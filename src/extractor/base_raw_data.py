@@ -70,7 +70,7 @@ class BaseRawData:
             self.json_configs = json.load(json_configs)
 
         # create rosbag directory
-        self.rosbag_dir = ROOT_DIR + '/rosbags'
+        self.rosbag_dir = ROOT_DIR + '/rosbags/%s' % self.date
         if not os.path.exists(self.rosbag_dir):
             os.makedirs(self.rosbag_dir)
 

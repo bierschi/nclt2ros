@@ -170,13 +170,13 @@ class ToRosbag(BaseRawData):
                     next_utime = images_timestamps_microsec[i_img]
                     next_packet = "img"
 
-            print 'next_packet: ', next_packet
+            # print 'next_packet: ', next_packet
 
             if next_packet == "done":
                 break
 
             elif next_packet == "gps":
-                print("write gps")
+                # print("write gps")
                 navsat, track, speed, timestamp, tf_static_msg = self.ros_sensor_msg.gps_to_navsat(gps_list=gps_list, i=i_gps)
                 self.bag.write(self.json_configs['topics']['gps_sensor']['fix'], navsat, timestamp)
                 self.bag.write(self.json_configs['topics']['gps_sensor']['track'], track, timestamp)
@@ -185,7 +185,7 @@ class ToRosbag(BaseRawData):
                 i_gps += 1
 
             elif next_packet == "gps_rtk":
-                print("write gps_rtk")
+                # print("write gps_rtk")
                 navsat, track, speed, timestamp, tf_static_msg = self.ros_sensor_msg.gps_rtk_to_navsat(gps_rtk_list=gps_rtk_list, i=i_gps_rtk)
                 self.bag.write(self.json_configs['topics']['gps_rtk_sensor']['fix'], navsat, t=timestamp)
                 self.bag.write(self.json_configs['topics']['gps_rtk_sensor']['track'], track, t=timestamp)
@@ -194,7 +194,7 @@ class ToRosbag(BaseRawData):
                 i_gps_rtk += 1
 
             elif next_packet == "ms25":
-                print("write ms25")
+                # print("write ms25")
                 imu, mag, timestamp, tf_static_msg = self.ros_sensor_msg.ms25_to_imu(imu_list=ms25_list, i=i_ms25)
                 self.bag.write(self.json_configs['topics']['ms25_sensor']['imu_data'], imu, t=timestamp)
                 self.bag.write(self.json_configs['topics']['ms25_sensor']['imu_mag'], mag, t=timestamp)
@@ -202,7 +202,7 @@ class ToRosbag(BaseRawData):
                 i_ms25 += 1
 
             elif next_packet == "odom":
-                print("write odom")
+                # print("write odom")
                 odom, timestamp, tf_msg, tf_static_msg = self.ros_sensor_msg.wheel_odom_to_odometry(odom_list=odom_list, odom_cov_list=odom_cov_list, wheels_list=wheels_list, kvh_list=kvh_list, i=i_odom)
                 self.bag.write(self.json_configs['topics']['wheel_odometry'], odom, t=timestamp)
                 self.bag.write('/tf', tf_msg, t=timestamp)
@@ -210,28 +210,28 @@ class ToRosbag(BaseRawData):
                 i_odom += 1
 
             elif next_packet == "gt":
-                print("write gt")
+                # print("write gt")
                 gt, timestamp, tf_static_msg = self.ros_sensor_msg.gt_to_odometry(gt_list=gt_list, gt_cov_list=gt_cov_list, i=i_gt)
                 self.bag.write(self.json_configs['topics']['ground_truth'], gt, t=timestamp)
                 self.bag.write('/tf_static', tf_static_msg, t=timestamp)
                 i_gt += 1
 
             elif next_packet == "hok4":
-                print("write hok4")
+                # print("write hok4")
                 timestamp, scan, tf_static_msg = self.hokuyo_data.write_hokuyo_4m_to_laserscan(utime_hok4, data_hok4)
                 self.bag.write(self.json_configs['topics']['hokuyo']['urg_lidar'], scan, t=timestamp)
                 self.bag.write('/tf_static', tf_static_msg, t=timestamp)
                 utime_hok4, data_hok4 = self.hokuyo_data.read_next_hokuyo_4m_packet()
 
             elif next_packet == "hok30":
-                print("write hok30")
+                # print("write hok30")
                 timestamp, scan, tf_static_msg = self.hokuyo_data.write_hokuyo_30m_to_laserscan(utime_hok30, data_hok30)
                 self.bag.write(self.json_configs['topics']['hokuyo']['utm_lidar'], scan, t=timestamp)
                 self.bag.write('/tf_static', tf_static_msg, t=timestamp)
                 utime_hok30, data_hok30 = self.hokuyo_data.read_next_hokuyo_30m_packet()
 
             elif next_packet == "vel_sync":
-                print("vel_sync")
+                # print("vel_sync")
                 try:
                     hits = self.velodyne_sync_data.read_next_velodyne_sync_packet(vel_sync_bin_files[i_vel])
                 except ValueError:
@@ -259,7 +259,9 @@ class ToRosbag(BaseRawData):
                 print "unkown packet type"
 
             num_messages += 1
-            print 'num message: ', num_messages
+            if (num_messages % 1000) == 0:
+                print "number messages written: ", num_messages
+
             if num_messages >= max_num_messages:
                 break
 
