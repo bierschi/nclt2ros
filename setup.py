@@ -1,10 +1,5 @@
 import os
-try:
-    from setuptools import setup
-    from setuptools.command.install import install
-except ImportError:
-    from distutils.core import setup
-    from distutils.command.install import install
+from setuptools import setup, find_packages
 
 
 def read(fname):
@@ -19,11 +14,17 @@ setup(
     author_email="christian.bierschneider@web.de",
     description="downloads, extracts, converts and visualizes the nclt dataset",
     long_description=read('README.md'),
-    license='MIT',
+    url='',
+    license=read('LICENSE'),
+    python_requires='>=2.7',
     py_modules=["nclt2rosbag", "definitions"],
-    #scripts=['', ''],
-    packages=["src"],
-    #package_data={},
+    scripts=['nclt2rosbag.py'],
+    #packages=["src", "src.converter", "src.downloader", "src.extractor", "src.transformer", "src.visualizer"],
+    #packages=find_packages(exclude=('plots','raw_data', 'rosbags')),
+    packages=find_packages(),
+    #package_data={'': ['requirements.txt']},
+    #package_data={'cfg': ['configuration.json'], 'rviz': ['config.rviz'], '': ['requirements.txt']},
+    data_files=[('cfg', ['cfg/configuration.json'])],
     install_requires=["numpy", "simplekml", "matplotlib"],
     #cmdclass={
     #    'install': PostInstallCommand

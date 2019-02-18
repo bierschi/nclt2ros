@@ -1,4 +1,4 @@
-from src.converter.to_rosbag import ToRosbag
+from nclt2rosbag.converter.to_rosbag import ToRosbag
 
 
 class Convert:

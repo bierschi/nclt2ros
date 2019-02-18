@@ -10,7 +10,7 @@ With [nclt2rosbag](https://github.com/bierschi/nclt2rosbag) it is possible to
 the data from [The University of Michigan North Campus Long-Term Vision and LIDAR Dataset.](http://robots.engin.umich.edu/nclt/)
 
 
-![](rviz/rviz_example.gif)
+![](examples/rviz_example.gif)
 
 
 #### Table of Contents:

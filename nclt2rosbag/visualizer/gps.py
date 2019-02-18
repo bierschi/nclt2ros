@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from src.visualizer.plotter import Plotter
-from src.transformer.coordinate_frame import CoordinateFrame
+
+from nclt2rosbag.visualizer.plotter import Plotter
+from nclt2rosbag.transformer.coordinate_frame import CoordinateFrame
 
 
 class GPS(Plotter):

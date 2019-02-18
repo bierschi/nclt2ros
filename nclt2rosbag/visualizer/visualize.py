@@ -1,8 +1,8 @@
-from src.visualizer.gt import GroundTruth
-from src.visualizer.gps import GPS
-from src.visualizer.gps_rtk import GPS_RTK
-from src.visualizer.wheel_odom import WheelOdom
-from src.visualizer.all import AllSensors
+from nclt2rosbag.visualizer.gt import GroundTruth
+from nclt2rosbag.visualizer.gps import GPS
+from nclt2rosbag.visualizer.gps_rtk import GPS_RTK
+from nclt2rosbag.visualizer.wheel_odom import WheelOdom
+from nclt2rosbag.visualizer.all import AllSensors
 
 
 class Visualize:

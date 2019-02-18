@@ -1,6 +1,7 @@
 import os
 import subprocess
-from definitions import ROOT_DIR
+
+from nclt2rosbag.definitions import ROOT_DIR
 
 
 class Download:

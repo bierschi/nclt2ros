@@ -1,6 +1,6 @@
 import os
 import json
-from definitions import ROOT_DIR
+from nclt2rosbag.definitions import ROOT_DIR
 
 
 class BaseRawData:

@@ -8,7 +8,7 @@ import tf2_msgs.msg
 import tf.transformations
 
 from PIL import Image as pilImage
-from src.extractor.base_raw_data import BaseRawData
+from nclt2rosbag.extractor.base_raw_data import BaseRawData
 
 
 class ImageData(BaseRawData):

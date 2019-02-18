@@ -1,8 +1,8 @@
 import os
 import simplekml
-from definitions import ROOT_DIR
-from src.extractor.read_sensor_data import ReadSensorData
-from src.extractor.read_ground_truth import ReadGroundTruth
+from nclt2rosbag.definitions import ROOT_DIR
+from nclt2rosbag.extractor.read_sensor_data import ReadSensorData
+from nclt2rosbag.extractor.read_ground_truth import ReadGroundTruth
 
 
 class Plotter:

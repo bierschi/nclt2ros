@@ -8,7 +8,7 @@ import geometry_msgs.msg
 from sensor_msgs.msg import NavSatStatus, NavSatFix, Imu, MagneticField
 from nav_msgs.msg import Odometry
 from std_msgs.msg import UInt16, Float64
-from src.extractor.base_raw_data import BaseRawData
+from nclt2rosbag.extractor.base_raw_data import BaseRawData
 
 # default COVARIANCE matrices
 IMU_ORIENT_COVAR = [1e-3, 0, 0,

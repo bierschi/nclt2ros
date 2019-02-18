@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 import argparse
-from src.downloader.download import Download
-from src.extractor.extract import Extract
-from src.converter.convert import Convert
-from src.visualizer.visualize import Visualize
+from nclt2rosbag.downloader.download import Download
+from nclt2rosbag.extractor.extract import Extract
+from nclt2rosbag.converter.convert import Convert
+from nclt2rosbag.visualizer.visualize import Visualize
 
 
 def main():

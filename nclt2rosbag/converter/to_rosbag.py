@@ -3,14 +3,14 @@ import os
 import subprocess
 import sys
 
-from src.extractor.read_ground_truth import ReadGroundTruth
-from src.extractor.read_ground_truth_covariance import ReadGroundTruthCovariance
-from src.extractor.read_sensor_data import ReadSensorData
-from src.transformer.hokuyo_data import HokuyoData
-from src.transformer.velodyne_sync_data import VelodyneSyncData
-from src.transformer.image_data import ImageData
-from src.extractor.base_raw_data import BaseRawData
-from src.transformer.sensor_data import RosSensorMsg
+from nclt2rosbag.extractor.read_ground_truth import ReadGroundTruth
+from nclt2rosbag.extractor.read_ground_truth_covariance import ReadGroundTruthCovariance
+from nclt2rosbag.extractor.read_sensor_data import ReadSensorData
+from nclt2rosbag.transformer.hokuyo_data import HokuyoData
+from nclt2rosbag.transformer.velodyne_sync_data import VelodyneSyncData
+from nclt2rosbag.transformer.image_data import ImageData
+from nclt2rosbag.extractor.base_raw_data import BaseRawData
+from nclt2rosbag.transformer.sensor_data import RosSensorMsg
 
 
 class ToRosbag(BaseRawData):
