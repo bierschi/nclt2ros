@@ -7,26 +7,25 @@ def read(fname):
         return f.read()
 
 
+EXCLUDE_FROM_PACKAGES = ['nclt2rosbag.raw_data',
+                         'nclt2rosbag.rosbags',
+                         'nclt2rosbag.plots']
+
+
 setup(
     name="nclt2rosbag",
     version="1.0",
     author="Bierschneider Christian",
     author_email="christian.bierschneider@web.de",
-    description="downloads, extracts, converts and visualizes the nclt dataset",
+    description="downloads, extracts, converts and visualizes the NCLT dataset",
     long_description=read('README.md'),
     url='',
     license=read('LICENSE'),
     python_requires='>=2.7',
-    py_modules=["nclt2rosbag", "definitions"],
+    py_modules=["nclt2rosbag"],
     scripts=['nclt2rosbag.py'],
-    #packages=["src", "src.converter", "src.downloader", "src.extractor", "src.transformer", "src.visualizer"],
-    #packages=find_packages(exclude=('plots','raw_data', 'rosbags')),
-    packages=find_packages(),
-    #package_data={'': ['requirements.txt']},
-    #package_data={'cfg': ['configuration.json'], 'rviz': ['config.rviz'], '': ['requirements.txt']},
-    data_files=[('cfg', ['cfg/configuration.json'])],
+    packages=find_packages(exclude=EXCLUDE_FROM_PACKAGES),
+    package_dir={'nclt2rosbag': 'nclt2rosbag'},
+    package_data={'nclt2rosbag': ['cfg/configuration.json', 'rviz/config.rviz']},
     install_requires=["numpy", "simplekml", "matplotlib"],
-    #cmdclass={
-    #    'install': PostInstallCommand
-    #},
 )
