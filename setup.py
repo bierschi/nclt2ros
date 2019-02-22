@@ -23,9 +23,10 @@ setup(
     license=read('LICENSE'),
     python_requires='>=2.7',
     py_modules=["nclt2rosbag"],
-    scripts=['nclt2rosbag.py'],
+    #entry_points={'console_scripts': ['nclt2rosbag = nclt2rosbag.nclt2rosbag:main', ]},
     packages=find_packages(exclude=EXCLUDE_FROM_PACKAGES),
     package_dir={'nclt2rosbag': 'nclt2rosbag'},
     package_data={'nclt2rosbag': ['cfg/configuration.json', 'rviz/config.rviz']},
+    data_files=[('tf_tree', ['tf_tree/frames.pdf'])],
     install_requires=["numpy", "simplekml", "matplotlib"],
 )

@@ -24,6 +24,13 @@ the data from [The University of Michigan North Campus Long-Term Vision and LIDA
 
 
 ## Usage
+download and build this repository
+<pre><code>
+git clone https://github.com/bierschi/nclt2rosbag.git <br>
+cd nclt2rosbag <br>
+sudo python setup.py install
+</pre></code>
+
 make the script <code>nclt2rosbag.py</code> executable
 <pre><code>
 chmod +x nclt2rosbag.py
