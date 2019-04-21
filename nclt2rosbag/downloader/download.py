@@ -1,7 +1,7 @@
 import os
 import subprocess
-
-from nclt2rosbag.definitions import ROOT_DIR
+from time import sleep
+#TODO Logger
 
 
 class Download:
@@ -10,9 +10,7 @@ class Download:
             Download(args=args)
     """
 
-    def __init__(self, args):
-
-        print("Download NCLT dataset from %s" % args.date)
+    def __init__(self, date, output_path, lb3, sen, hokuyo, vel, gt, gt_cov):
 
         self.download_url_dir = 'http://robots.engin.umich.edu/nclt'
         self.dates = ['2012-01-08', '2012-01-15', '2012-01-22', '2012-02-02', '2012-02-04', '2012-02-05', '2012-02-12',
@@ -20,60 +18,72 @@ class Download:
                       '2012-05-26', '2012-06-15', '2012-08-04', '2012-08-20', '2012-09-28', '2012-10-28', '2012-11-04',
                       '2012-11-16', '2012-11-17', '2012-12-01', '2013-01-10', '2013-02-23', '2013-04-05']
 
-        self.args = args
-        self.date = args.date
+        self.date = date
+        self.lb3 = lb3
+        self.sen = sen
+        self.hokuyo = hokuyo
+        self.vel = vel
+        self.gt = gt
+        self.gt_cov = gt_cov
 
-        self.raw_data_dir = ROOT_DIR + '/raw_data/' + str(self.date)
+        self.raw_data_dir = output_path + str(self.date)
         if not os.path.exists(self.raw_data_dir):
             os.makedirs(self.raw_data_dir)
 
         self.saved_path = None
 
         if self.check_date(self.date):
+            self.print_log()
+            sleep(2)
             self.load_dataset()
         else:
             raise ValueError("Given 'Date' is not in dataset")
 
+    def print_log(self):
+        """
+        prints statement and writes to log file
+        """
+        print "Download"
+
+        if self.lb3:
+            print "- Images"
+        if self.sen:
+            print "- Sensors"
+        if self.hokuyo:
+            print "- Hokuyo"
+        if self.vel:
+            print "- Velodyne"
+        if self.gt:
+            print "- Ground Truth Pose"
+        if self.gt_cov:
+            print "- Ground Truth Covariance"
+
+        print("from date %s " % self.date)
+
     def load_dataset(self):
         """
-        load data depending on the arguments specified in the argument parser
+        load data depending on the arguments specified in the launch file
         """
 
         self.saved_path = os.getcwd()
         os.chdir(self.raw_data_dir)
 
-        if (not self.args.lb3) and (not self.args.sen) and (not self.args.vel) and (not self.args.hokuyo) and \
-           (not self.args.gt) and (not self.args.gt_cov):
-            print("Download all data")
-            self.get_images()
-            self.get_sensors()
-            self.get_velodyne()
-            self.get_hokuyo()
-            self.get_ground_truth_pose()
-            self.get_ground_truth_cov()
-
-        if self.args.lb3:
-            print("Download Images")
+        if self.lb3:
             self.get_images()
 
-        if self.args.sen:
-            print("Download Sensors")
+        if self.sen:
             self.get_sensors()
 
-        if self.args.vel:
-            print("Download Velodyne")
+        if self.vel:
             self.get_velodyne()
 
-        if self.args.hokuyo:
-            print("Download Hokuyo")
+        if self.hokuyo:
             self.get_hokuyo()
 
-        if self.args.gt:
-            print("Download Ground Truth")
+        if self.gt:
             self.get_ground_truth_pose()
 
-        if self.args.gt_cov:
-            print("Download Ground Truth Covariance")
+        if self.gt_cov:
             self.get_ground_truth_cov()
 
         os.chdir(self.saved_path)

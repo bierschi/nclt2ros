@@ -1,21 +1,16 @@
 #!/usr/bin/env python
 
 import rospy
-from std_msgs.msg import String
-from nclt2rosbag.first_test import FirstTest
+from nclt2rosbag.initializer import Initializer
 
 
 def main():
-    ft = FirstTest()
-    pub = rospy.Publisher('chatter', String, queue_size=10)
-    rospy.init_node('talker', anonymous=True)
 
-    rate = rospy.Rate(10)
-    while not rospy.is_shutdown():
-        hello_str = "hello world %s" % rospy.get_time()
-        rospy.loginfo(hello_str)
-        pub.publish(hello_str)
-        rate.sleep()
+    rospy.init_node('nclt2rosbag')
+
+    init = Initializer()
+
+    rospy.spin()
 
 
 if __name__ == '__main__':

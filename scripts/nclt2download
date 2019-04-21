@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+
+import rospy
+from nclt2rosbag.downloader.download import Download
+from definitions import ROOT_DIR
+
+
+def main():
+
+    rospy.init_node('nclt2download')
+
+    date = rospy.get_param('~date', '2013-01-10')
+
+    DEFAULT_PATH = ROOT_DIR + '/raw_data/'
+    output_path = rospy.get_param('~output_path', DEFAULT_PATH)
+
+    lb3    = rospy.get_param('~lb3',    False)
+    sen    = rospy.get_param('~sen',    False)
+    vel    = rospy.get_param('~vel',    False)
+    hokuyo = rospy.get_param('~hokuyo', False)
+    gt     = rospy.get_param('~gt',     True)
+    gt_cov = rospy.get_param('~gt_cov', True)
+
+    loader = Download(date=date, output_path=output_path, lb3=lb3, sen=sen, vel=vel, hokuyo=hokuyo, gt=gt, gt_cov=gt_cov)
+
+
+    rospy.spin()
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except rospy.ROSInterruptException:
+        pass
