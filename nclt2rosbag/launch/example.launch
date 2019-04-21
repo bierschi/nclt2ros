@@ -1,0 +1,9 @@
+<launch>
+    <node name="nclt2rosbag" pkg="nclt2rosbag" type="nclt2rosbag.py"/>
+
+
+
+
+
+
+</launch>
