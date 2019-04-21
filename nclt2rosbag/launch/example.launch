@@ -1,0 +1,7 @@
+<launch>
+
+    <node name="EXAMPLE" pkg="nclt2rosbag" type="nclt2rosbag" />
+
+
+
+</launch>
