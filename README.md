@@ -3,10 +3,10 @@
 
 With [nclt2ros](https://github.com/bierschi/nclt2rosbag) it is possible to
 
-- [download](https://github.com/bierschi/nclt2rosbag#download.launch)
-- [extract](https://github.com/bierschi/nclt2rosbag#download.launch)
-- [convert](https://github.com/bierschi/nclt2rosbag#convert.launch)
-- [visualize](https://github.com/bierschi/nclt2rosbag#visualize.launch)
+- [download](https://github.com/bierschi/nclt2rosbag#downloadlaunch)
+- [extract](https://github.com/bierschi/nclt2rosbag#downloadlaunch)
+- [convert](https://github.com/bierschi/nclt2rosbag#convertlaunch)
+- [visualize](https://github.com/bierschi/nclt2rosbag#visualizelaunch)
 
 the data from [The University of Michigan North Campus Long-Term Vision and LIDAR Dataset.](http://robots.engin.umich.edu/nclt/)
 

@@ -9,7 +9,7 @@ class Download:
             Download(date='2013-01-10', output_path='/home/christian/', gt=True)
     """
 
-    def __init__(self, date, output_path, lb3=False, sen=False, hokuyo=False, vel=False, gt=False, gt_cov=False):
+    def __init__(self, date, raw_data_path, lb3=False, sen=False, hokuyo=False, vel=False, gt=False, gt_cov=False):
 
         self.download_url_dir = 'http://robots.engin.umich.edu/nclt'
         self.dates = ['2012-01-08', '2012-01-15', '2012-01-22', '2012-02-02', '2012-02-04', '2012-02-05', '2012-02-12',
@@ -18,7 +18,7 @@ class Download:
                       '2012-11-16', '2012-11-17', '2012-12-01', '2013-01-10', '2013-02-23', '2013-04-05']
 
         self.date = date
-        self.output_path = str(output_path)
+        self.raw_data_path = str(raw_data_path)
 
         self.lb3    = lb3
         self.sen    = sen
@@ -27,10 +27,10 @@ class Download:
         self.gt     = gt
         self.gt_cov = gt_cov
 
-        if self.output_path.endswith('/'):
-            self.raw_data_dir = output_path + str(self.date)
+        if self.raw_data_path.endswith('/'):
+            self.raw_data_dir = raw_data_path + str(self.date)
         else:
-            self.raw_data_dir = output_path + '/' + str(self.date)
+            self.raw_data_dir = raw_data_path + '/' + str(self.date)
 
         if not os.path.exists(self.raw_data_dir):
             os.makedirs(self.raw_data_dir)
