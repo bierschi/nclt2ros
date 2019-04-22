@@ -1,4 +1,4 @@
-# NCLT2ROSBAG
+# NCLT2ROS
 
 With [nclt2rosbag](https://github.com/bierschi/nclt2rosbag) it is possible to
 
