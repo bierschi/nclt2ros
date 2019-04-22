@@ -1,13 +1,20 @@
 <launch>
     # visualize
-    <node name="nclt2rosbag" pkg="nclt2ros" type="nclt2visualize" >
+    <node name="nclt2rosbag" pkg="nclt2ros" type="nclt2visualizer" >
+
         <param name="date"          value="2013-01-10"/>
-        <param name="output_path"   value="/home/christian/raw_data" />
-        <param name="lb3"           value="False" />
-        <param name="sen"           value="False" />
-        <param name="vel"           value="False" />
-        <param name="hokuyo"        value="False" />
-        <param name="gt"            value="False" />
-        <param name="gt_cov"        value="False" />
+        <param name="raw_data_path" value="/home/christian/nclt2ros/raw_data" />
+        <param name="plot_path"     value="/home/christian/nclt2ros/plots" />
+
+        <param name="gt_kml"        value="False" />
+        <param name="gt_png"        value="False" />
+        <param name="gps_kml"       value="False" />
+        <param name="gps_png"       value="False" />
+        <param name="gps_rtk_kml"   value="False" />
+        <param name="gps_rtk_png"   value="False" />
+        <param name="odom_kml"      value="False" />
+        <param name="odom_png"      value="False" />
+        <param name="all"           value="False" />
+
     </node>
 </launch>

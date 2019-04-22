@@ -14,7 +14,7 @@ def main():
 
     DEFAULT_PATH = ROOT_DIR + '/raw_data/'
     #DEFAULT_PATH = '/home/christian/raw_data/'
-    output_path = rospy.get_param('~output_path', DEFAULT_PATH)
+    raw_data_path = rospy.get_param('~raw_data_path', DEFAULT_PATH)
 
     lb3    = rospy.get_param('~lb3',    False)
     sen    = rospy.get_param('~sen',    False)
@@ -23,9 +23,9 @@ def main():
     gt     = rospy.get_param('~gt',     False)
     gt_cov = rospy.get_param('~gt_cov', False)
 
-    loader = Download(date=date, output_path=output_path, lb3=lb3, sen=sen, vel=vel, hokuyo=hokuyo, gt=gt, gt_cov=gt_cov)
+    loader = Download(date=date, raw_data_path=raw_data_path, lb3=lb3, sen=sen, vel=vel, hokuyo=hokuyo, gt=gt, gt_cov=gt_cov)
 
-    extractor = Extract(date=date, output_path=output_path, lb3=lb3, sen=sen, vel=vel, hokuyo=hokuyo)
+    extractor = Extract(date=date, raw_data_path=raw_data_path, lb3=lb3, sen=sen, vel=vel, hokuyo=hokuyo)
 
 
 if __name__ == '__main__':

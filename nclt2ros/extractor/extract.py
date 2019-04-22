@@ -7,11 +7,11 @@ class Extract(BaseRawData):
     """Class to extract the tarballs in raw data
 
     USAGE:
-            ExtractRawData('2013-01-10')
+            ExtractRawData('2013-01-10', '/home/christian/nclt2ros/raw_data')
 
     """
 
-    def __init__(self, date, output_path, lb3=False, sen=False, vel=False, hokuyo=False):
+    def __init__(self, date, raw_data_path, lb3=False, sen=False, vel=False, hokuyo=False):
 
         if isinstance(date, str):
             self.date = date
@@ -19,7 +19,7 @@ class Extract(BaseRawData):
             raise TypeError("'date' must be type of string")
 
         # init base class
-        BaseRawData.__init__(self, date=date, output_path=output_path)
+        BaseRawData.__init__(self, date=date, raw_data_path=raw_data_path)
 
         self.lb3    = lb3
         self.sen    = sen
@@ -49,6 +49,8 @@ class Extract(BaseRawData):
                             tar = tarfile.open(file, 'r:gz')
                             tar.extractall()
                             tar.close()
+                            # remove tar.gz file
+                            os.remove(file)
                 else:
                     print("hokuyo_data already exists")
 
@@ -64,10 +66,13 @@ class Extract(BaseRawData):
                             tar = tarfile.open(file, 'r:gz')
                             tar.extractall()
                             tar.close()
+                            # remove tar.gz file
+                            os.remove(file)
+
                 else:
                     print("sensor_data already exists")
 
-        # check velodyne data
+        # check velodyne_data
         if self.vel:
             if os.path.exists(self.velodyne_data_dir):
                 os.chdir(self.velodyne_data_dir)
@@ -79,10 +84,12 @@ class Extract(BaseRawData):
                             tar = tarfile.open(file, 'r:gz')
                             tar.extractall()
                             tar.close()
+                            # remove tar.gz file
+                            os.remove(file)
                 else:
                     print("velodyne_data already exists")
 
-        # check image data
+        # check image_data
         if self.lb3:
             if os.path.exists(self.images_dir):
                 os.chdir(self.images_dir)
@@ -94,5 +101,7 @@ class Extract(BaseRawData):
                             tar = tarfile.open(file, 'r:gz')
                             tar.extractall()
                             tar.close()
+                            # remove tar.gz file
+                            os.remove(file)
                 else:
                     print("image_data already exists")
