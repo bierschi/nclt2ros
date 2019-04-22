@@ -1,0 +1,13 @@
+<launch>
+    # visualize
+    <node name="nclt2rosbag" pkg="nclt2ros" type="nclt2visualize" >
+        <param name="date"          value="2013-01-10"/>
+        <param name="output_path"   value="/home/christian/raw_data" />
+        <param name="lb3"           value="False" />
+        <param name="sen"           value="False" />
+        <param name="vel"           value="False" />
+        <param name="hokuyo"        value="False" />
+        <param name="gt"            value="False" />
+        <param name="gt_cov"        value="False" />
+    </node>
+</launch>

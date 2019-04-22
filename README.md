@@ -1,4 +1,4 @@
-# NCLT2ROSBAG
+# NCLT2ROS
 
 With [nclt2rosbag](https://github.com/bierschi/nclt2rosbag) it is possible to
 
@@ -31,7 +31,7 @@ cd nclt2rosbag <br>
 sudo python setup.py install
 </pre></code>
 
-make the script <code>nclt2rosbag.py</code> executable
+make the script <code>nclt2ros.py</code> executable
 <pre><code>
 chmod +x nclt2rosbag.py
 </pre></code>

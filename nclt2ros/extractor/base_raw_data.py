@@ -1,6 +1,5 @@
 import os
-import json
-from nclt2rosbag.definitions import ROOT_DIR
+from definitions import ROOT_DIR
 
 
 class BaseRawData:
@@ -10,7 +9,7 @@ class BaseRawData:
             BaseRawData('2013-01-10')
 
     """
-    def __init__(self, date):
+    def __init__(self, date, output_path):
 
         # init date
         if isinstance(date, str):
@@ -18,8 +17,12 @@ class BaseRawData:
         else:
             raise TypeError('"date" must be of type string')
 
+        self.output_path = output_path
         # init raw directory
-        self.raw_data_dir = ROOT_DIR + '/raw_data/' + str(self.date)
+        if self.output_path.endswith('/'):
+            self.raw_data_dir = output_path + str(self.date)
+        else:
+            self.raw_data_dir = output_path + '/' + str(self.date)
 
         # check if data exists
         if os.path.exists(self.raw_data_dir):
@@ -65,9 +68,6 @@ class BaseRawData:
         else:
             raise ValueError("raw_data directory not exists")
 
-        # open json configuration file
-        with open(ROOT_DIR + '/cfg/configuration.json') as json_configs:
-            self.json_configs = json.load(json_configs)
 
         # create rosbag directory
         self.rosbag_dir = ROOT_DIR + '/rosbags/%s' % self.date
