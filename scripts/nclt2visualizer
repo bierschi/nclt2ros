@@ -6,14 +6,11 @@ from definitions import ROOT_DIR
 
 def main():
 
-    rospy.init_node('nclt2extract')
+    rospy.init_node('nclt2visualizer')
 
     date = rospy.get_param('~date', '2013-01-10')
 
     DEFAULT_PATH = ROOT_DIR + '/raw_data/'
-
-
-    rospy.spin()
 
 
 if __name__ == '__main__':

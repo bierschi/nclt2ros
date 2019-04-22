@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 import rospy
-from nclt2rosbag.initializer import Initializer
+from nclt2ros.initializer import Initializer
 
 
 def main():
 
-    rospy.init_node('nclt2rosbag')
+    rospy.init_node('nclt2ros')
 
     init = Initializer()
 

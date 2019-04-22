@@ -1,16 +1,15 @@
 import os
+import rospy
 import subprocess
-from time import sleep
-#TODO Logger
 
 
 class Download:
     """Class to download the NCLT Dataset from http://robots.engin.umich.edu/nclt/
     USAGE:
-            Download(args=args)
+            Download(date='2013-01-10', output_path='/home/christian/', gt=True)
     """
 
-    def __init__(self, date, output_path, lb3, sen, hokuyo, vel, gt, gt_cov):
+    def __init__(self, date, output_path, lb3=False, sen=False, hokuyo=False, vel=False, gt=False, gt_cov=False):
 
         self.download_url_dir = 'http://robots.engin.umich.edu/nclt'
         self.dates = ['2012-01-08', '2012-01-15', '2012-01-22', '2012-02-02', '2012-02-04', '2012-02-05', '2012-02-12',
@@ -19,14 +18,20 @@ class Download:
                       '2012-11-16', '2012-11-17', '2012-12-01', '2013-01-10', '2013-02-23', '2013-04-05']
 
         self.date = date
-        self.lb3 = lb3
-        self.sen = sen
+        self.output_path = str(output_path)
+
+        self.lb3    = lb3
+        self.sen    = sen
         self.hokuyo = hokuyo
-        self.vel = vel
-        self.gt = gt
+        self.vel    = vel
+        self.gt     = gt
         self.gt_cov = gt_cov
 
-        self.raw_data_dir = output_path + str(self.date)
+        if self.output_path.endswith('/'):
+            self.raw_data_dir = output_path + str(self.date)
+        else:
+            self.raw_data_dir = output_path + '/' + str(self.date)
+
         if not os.path.exists(self.raw_data_dir):
             os.makedirs(self.raw_data_dir)
 
@@ -34,7 +39,6 @@ class Download:
 
         if self.check_date(self.date):
             self.print_log()
-            sleep(2)
             self.load_dataset()
         else:
             raise ValueError("Given 'Date' is not in dataset")
@@ -43,7 +47,9 @@ class Download:
         """
         prints statement and writes to log file
         """
+
         print "Download"
+        rospy.loginfo("Download ")
 
         if self.lb3:
             print "- Images"
@@ -55,10 +61,12 @@ class Download:
             print "- Velodyne"
         if self.gt:
             print "- Ground Truth Pose"
+            rospy.loginfo("- Ground Truth Pose")
         if self.gt_cov:
             print "- Ground Truth Covariance"
 
         print("from date %s " % self.date)
+        rospy.loginfo("from date %s " % self.date)
 
     def load_dataset(self):
         """

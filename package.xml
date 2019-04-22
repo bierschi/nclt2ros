@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>nclt2rosbag</name>
+  <name>nclt2ros</name>
   <version>0.0.0</version>
   <description>ROS package to download, extract, convert and visualize the NCLT Dataset</description>
 

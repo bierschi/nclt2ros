@@ -1,6 +1,6 @@
 <launch>
     # convert
-    <node name="nclt2rosbag" pkg="nclt2rosbag" type="nclt2rosbag" >
+    <node name="nclt2rosbag" pkg="nclt2ros" type="nclt2rosbag" >
         <param name="date"          value="2013-01-10"/>
         <param name="output_path"   value="/home/christian/raw_data" />
         <param name="lb3"           value="False" />
