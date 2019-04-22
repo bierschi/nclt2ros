@@ -1,11 +1,12 @@
+
 # NCLT2ROS
 
-With [nclt2rosbag](https://github.com/bierschi/nclt2rosbag) it is possible to
+With [nclt2ros](https://github.com/bierschi/nclt2rosbag) it is possible to
 
-- [download](https://github.com/bierschi/nclt2rosbag#download)
-- [extract](https://github.com/bierschi/nclt2rosbag#extract)
-- [convert](https://github.com/bierschi/nclt2rosbag#convert)
-- [visualize](https://github.com/bierschi/nclt2rosbag#visualize)
+- [download](https://github.com/bierschi/nclt2rosbag#download.launch)
+- [extract](https://github.com/bierschi/nclt2rosbag#download.launch)
+- [convert](https://github.com/bierschi/nclt2rosbag#convert.launch)
+- [visualize](https://github.com/bierschi/nclt2rosbag#visualize.launch)
 
 the data from [The University of Michigan North Campus Long-Term Vision and LIDAR Dataset.](http://robots.engin.umich.edu/nclt/)
 
@@ -15,68 +16,81 @@ the data from [The University of Michigan North Campus Long-Term Vision and LIDA
 
 #### Table of Contents:
 
-- [Usage](https://github.com/bierschi/nclt2rosbag#usage)
-- [Examples](https://github.com/bierschi/nclt2rosbag#examples)
-- [Transformation tree](https://github.com/bierschi/nclt2rosbag#transformation-tree)
+- [Launch files](https://github.com/bierschi/nclt2ros#launch-files)
+- [Usage](https://github.com/bierschi/nclt2ros#usage)
+- [Examples](https://github.com/bierschi/nclt2ros#examples)
+- [Transformation tree](https://github.com/bierschi/nclt2ros#transformation-tree)
 
 
 
+
+## Launch files
+
+##### download.launch
+
+```xml
+<launch>
+    # download
+    <node name="nclt2ros" pkg="nclt2ros"  type="nclt2downloader" >
+        <param name="date"          value="2013-01-10"/>
+        <param name="output_path"   value="/home/christian/raw_data" />
+        <param name="lb3"           value="False" />
+        <param name="sen"           value="True" />
+        <param name="vel"           value="False" />
+        <param name="hokuyo"        value="False" />
+        <param name="gt"            value="True" />
+        <param name="gt_cov"        value="True" />
+    </node>
+</launch>
+```
+
+##### convert.launch
+
+```xml
+<launch>
+    # download
+    <node name="nclt2ros" pkg="nclt2ros"  type="nclt2rosbag" >
+        <param name="date"          value="2013-01-10"/>
+        <param name="output_path"   value="/home/christian/raw_data" />
+        <param name="lb3"           value="False" />
+        <param name="sen"           value="True" />
+        <param name="vel"           value="False" />
+        <param name="hokuyo"        value="False" />
+        <param name="gt"            value="True" />
+        <param name="gt_cov"        value="True" />
+    </node>
+</launch>
+```
 
 
 ## Usage
+
+create a catkin workspace
+<pre><code>
+mkdir -p ~/catkin_ws/src<br>
+cd ~/catkin_ws/<br>
+catkin_make <br>
+source devel/setup.bash
+</pre></code>
+
 download and build this repository
 <pre><code>
-git clone https://github.com/bierschi/nclt2rosbag.git <br>
-cd nclt2rosbag <br>
-sudo python setup.py install
+cd src <br>
+git clone https://github.com/bierschi/nclt2ros.git <br>
+cd ~/catkin_ws/ <br>
+catkin_make
 </pre></code>
 
-make the script <code>nclt2ros.py</code> executable
+source the catkin workspace to access the package nclt2ros
 <pre><code>
-chmod +x nclt2rosbag.py
+source devel/setup.bash
 </pre></code>
 
-#### general structure
-
+execute the roslaunch file 
 <pre><code>
-./nclt2rosbag.py action date<br><br>
-download &nbsp;&nbsp;&nbsp;: --lb3 --sen --vel --hokuyo --gt --gt_cov <br>
-visualize&nbsp;&nbsp;&nbsp: --gt_kml --gt_png --gps_kml --gps_png --gps_rtk_kml --gps_rtk_png --odom_kml --odom_png --all <br>
-convert&nbsp;&nbsp;&nbsp;&nbsp;&nbsp: --lb3 --sen --vel --hokuyo --gt --bag --cam_folder
+roslaunch nclt2ros download.launch
 </pre></code>
-<br>
-The positional arguments <code>action</code> and <code>date</code> are mandatory. Indicate an action command (download, extract, convert, visualize). 
-Define also a date from the dataset. The additional commands for download, visualize and convert are optional arguments.
 
-
-#### download
-
-<pre><code>
-./nclt2rosbag.py download 2013-01-10 --gt --gt_cov --sen --hokuyo --vel
-</pre></code>
-Downloads the <code>Ground Truth Pose</code>, <code>Ground Truth Covariance</code>, <code>Sensors</code>, 
-<code>Hokuyo</code> and the <code>Velodyne</code> data from date <code>2013-01-10</code>.
-
-#### extract
-
-<pre><code>
-./nclt2rosbag.py extract 2013-01-10
-</pre></code>
-Extracts the hokuyo, images, sensors and velodyne tarballs , if available, in folder date named <code>2013-01-10</code>
-
-#### convert
-
-<pre><code>
-./nclt2rosbag.py convert 2013-01-10 --bag nclt --cam_folder 5
-</pre></code>
-Converts the dataset from <code>2013-01-10</code> in bag file <code>nclt.bag</code>, containing only images from cam folder 5 
-
-#### visualize
-
-<pre><code>
-./nclt2rosbag.py visualize 2013-01-10 --gt_kml
-</pre></code>
-Visualizes the ground truth from date 2013-01-10 as a kml file 
 
 
 ## Examples
