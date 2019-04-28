@@ -1,4 +1,5 @@
 import os
+import rospy
 from definitions import ROOT_DIR
 
 
@@ -6,16 +7,15 @@ class BaseRawData:
     """Base class to initialize the directories for the raw data
 
     USAGE:
-            BaseRawData('2013-01-10', '/home/christian/nclt2ros/raw_data')
+            BaseRawData('2013-01-10')
 
     """
-    def __init__(self, date, raw_data_path):
+    def __init__(self, date):
 
-        # init date
-        if isinstance(date, str):
-            self.date = date
-        else:
-            raise TypeError('"date" must be of type string')
+        self.date = date
+
+        RAW_DATA_PATH_DFLT = ROOT_DIR + '/raw_data/'
+        raw_data_path = rospy.get_param('~raw_data_path', RAW_DATA_PATH_DFLT)
 
         self.raw_data_path = raw_data_path
         # init raw directory
@@ -68,11 +68,3 @@ class BaseRawData:
         else:
             raise ValueError("raw_data directory not exists")
 
-
-        # create rosbag directory
-        #self.rosbag_dir = ROOT_DIR + '/rosbags/%s' % self.date
-        #if not os.path.exists(self.rosbag_dir):
-        #    os.makedirs(self.rosbag_dir)
-
-        # create camera folder settings
-        self.num_cameras = 6

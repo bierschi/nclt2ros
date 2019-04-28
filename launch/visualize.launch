@@ -6,15 +6,15 @@
         <param name="raw_data_path" value="/home/christian/nclt2ros/raw_data" />
         <param name="plot_path"     value="/home/christian/nclt2ros/plots" />
 
-        <param name="gt_kml"        value="False" />
-        <param name="gt_png"        value="False" />
-        <param name="gps_kml"       value="False" />
-        <param name="gps_png"       value="False" />
-        <param name="gps_rtk_kml"   value="False" />
-        <param name="gps_rtk_png"   value="False" />
-        <param name="odom_kml"      value="False" />
-        <param name="odom_png"      value="False" />
-        <param name="all"           value="False" />
+        <param name="gt_kml"        value="True" />
+        <param name="gt_png"        value="True" />
+        <param name="gps_kml"       value="True" />
+        <param name="gps_png"       value="True" />
+        <param name="gps_rtk_kml"   value="True" />
+        <param name="gps_rtk_png"   value="True" />
+        <param name="odom_kml"      value="True" />
+        <param name="odom_png"      value="True" />
+        <param name="all"           value="True" />
 
     </node>
 </launch>

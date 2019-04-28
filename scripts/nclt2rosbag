@@ -1,15 +1,24 @@
 #!/usr/bin/env python
 
 import rospy
-from nclt2ros.initializer import Initializer
+from nclt2ros.converter.to_rosbag import ToRosbag
 
 
 def main():
 
     rospy.init_node('nclt2ros')
 
-    init = Initializer()
+    date = rospy.get_param('~date', '2013-01-10')
 
+    bag_name           = rospy.get_param('~bag_name', 'nclt')
+    cam_folder         = rospy.get_param('~cam_folder', 5)
+    lb3                = rospy.get_param('~lb3', False)
+    sen                = rospy.get_param('~sen', False)
+    hokuyo             = rospy.get_param('~hokuyo', False)
+    vel                = rospy.get_param('~vel', False)
+    gt                 = rospy.get_param('~gt', False)
+
+    converter = ToRosbag(date=date, bag_name=bag_name, cam_folder=cam_folder, gt=gt, sen=sen, hokuyo=hokuyo, vel=vel, lb3=lb3)
     rospy.spin()
 
 

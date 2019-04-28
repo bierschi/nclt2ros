@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from definitions import ROOT_DIR
+from nclt2ros.visualizer.visualize import Visualize
 
 
 def main():
@@ -10,7 +10,20 @@ def main():
 
     date = rospy.get_param('~date', '2013-01-10')
 
-    DEFAULT_PATH = ROOT_DIR + '/raw_data/'
+    v_gt_kml      = rospy.get_param('~gt_kml',      False)
+    v_gt_png      = rospy.get_param('~gt_png',      False)
+    v_gps_kml     = rospy.get_param('~gps_kml',     False)
+    v_gps_png     = rospy.get_param('~gps_png',     False)
+    v_gps_rtk_kml = rospy.get_param('~gps_rtk_kml', False)
+    v_gps_rtk_png = rospy.get_param('~gps_rtk_png', False)
+    v_odom_kml    = rospy.get_param('~odom_kml',    False)
+    v_odom_png    = rospy.get_param('~odom_png',    False)
+    v_all         = rospy.get_param('~all',         False)
+
+    visualizer = Visualize(date=date,
+                           v_gt_kml=v_gt_kml, v_gt_png=v_gt_png, v_gps_kml=v_gps_kml, v_gps_png=v_gps_png,
+                           v_gps_rtk_kml=v_gps_rtk_kml, v_gps_rtk_png=v_gps_rtk_png, v_odom_kml=v_odom_kml,
+                           v_odom_png=v_odom_png, v_all=v_all)
 
 
 if __name__ == '__main__':
