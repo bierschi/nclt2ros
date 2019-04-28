@@ -1,4 +1,5 @@
 import os
+import rospy
 from definitions import ROOT_DIR
 
 
@@ -9,13 +10,12 @@ class BaseRawData:
             BaseRawData('2013-01-10', '/home/christian/nclt2ros/raw_data')
 
     """
-    def __init__(self, date, raw_data_path):
+    def __init__(self, date):
 
-        # init date
-        if isinstance(date, str):
-            self.date = date
-        else:
-            raise TypeError('"date" must be of type string')
+        self.date = date
+
+        RAW_DATA_PATH_DFLT = ROOT_DIR + '/raw_data/'
+        raw_data_path = rospy.get_param('~raw_data_path', RAW_DATA_PATH_DFLT)
 
         self.raw_data_path = raw_data_path
         # init raw directory

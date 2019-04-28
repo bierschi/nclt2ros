@@ -1,5 +1,5 @@
 import numpy as np
-from nclt2rosbag.extractor.base_raw_data import BaseRawData
+from nclt2ros.extractor.base_raw_data import BaseRawData
 
 
 class ReadSensorData(BaseRawData):
