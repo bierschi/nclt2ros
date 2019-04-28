@@ -6,7 +6,7 @@ import tf2_msgs.msg
 import tf.transformations
 
 from sensor_msgs.msg import LaserScan
-from nclt2rosbag.extractor.base_raw_data import BaseRawData
+from nclt2ros.extractor.base_raw_data import BaseRawData
 
 
 class HokuyoData(BaseRawData):

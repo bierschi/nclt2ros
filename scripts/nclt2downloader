@@ -13,7 +13,6 @@ def main():
     date = rospy.get_param('~date', '2013-01-10')
 
     DEFAULT_PATH = ROOT_DIR + '/raw_data/'
-    #DEFAULT_PATH = '/home/christian/raw_data/'
     raw_data_path = rospy.get_param('~raw_data_path', DEFAULT_PATH)
 
     lb3    = rospy.get_param('~lb3',    False)

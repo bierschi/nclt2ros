@@ -2,7 +2,6 @@
 
 import rospy
 from nclt2ros.visualizer.visualize import Visualize
-from definitions import ROOT_DIR
 
 
 def main():
@@ -10,12 +9,6 @@ def main():
     rospy.init_node('nclt2visualizer')
 
     date = rospy.get_param('~date', '2013-01-10')
-
-    RAW_DATA_PATH_DFLT = ROOT_DIR + '/raw_data/'
-    PLOT_PATH_DFLT = ROOT_DIR + '/plots/'
-    RAW_DATA_PATH_DFLT = '/home/christian/nclt2ros/raw_data/'
-    raw_data_path = rospy.get_param('~raw_data_path', RAW_DATA_PATH_DFLT)
-    plot_path     = rospy.get_param('~plot_path', PLOT_PATH_DFLT)
 
     v_gt_kml      = rospy.get_param('~gt_kml',      False)
     v_gt_png      = rospy.get_param('~gt_png',      False)

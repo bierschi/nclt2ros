@@ -3,7 +3,7 @@ import numpy as np
 import rospy
 
 from sensor_msgs.msg import PointCloud2, PointField
-from nclt2rosbag.extractor.base_raw_data import BaseRawData
+from nclt2ros.extractor.base_raw_data import BaseRawData
 
 
 class VelodyneData(BaseRawData):

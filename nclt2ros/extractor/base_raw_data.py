@@ -7,7 +7,7 @@ class BaseRawData:
     """Base class to initialize the directories for the raw data
 
     USAGE:
-            BaseRawData('2013-01-10', '/home/christian/nclt2ros/raw_data')
+            BaseRawData('2013-01-10')
 
     """
     def __init__(self, date):
@@ -68,11 +68,3 @@ class BaseRawData:
         else:
             raise ValueError("raw_data directory not exists")
 
-
-        # create rosbag directory
-        #self.rosbag_dir = ROOT_DIR + '/rosbags/%s' % self.date
-        #if not os.path.exists(self.rosbag_dir):
-        #    os.makedirs(self.rosbag_dir)
-
-        # create camera folder settings
-        self.num_cameras = 6
