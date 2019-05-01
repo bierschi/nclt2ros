@@ -6,7 +6,7 @@ from nclt2ros.transformer.coordinate_frame import CoordinateFrame
 
 
 class GPS(Plotter):
-    """Class to visualize the GPS as a kml and png file
+    """Class to visualize the GPS data as a kml and png file
 
     USAGE:
             GPS(date='2013-01-10', output_file='gps')
@@ -29,7 +29,6 @@ class GPS(Plotter):
 
     def save_kml_line(self):
         """visualize the gps data as a kml file
-
         """
 
         lat = self.gps[:, 3]
@@ -66,7 +65,6 @@ class GPS(Plotter):
 
     def save_gps_png(self):
         """visualize the gps data as a kml file
-
         """
 
         x_list, y_list = self.get_gps_data()
@@ -81,4 +79,12 @@ class GPS(Plotter):
         plt.savefig(self.visualization_png_gps_dir + 'gps.png')
 
         plt.show()
+
+    def get_png_gps_dir(self):
+        """get the png gps directory
+
+        :return: path to png gps directory
+        """
+        return self.visualization_png_gps_dir
+
 

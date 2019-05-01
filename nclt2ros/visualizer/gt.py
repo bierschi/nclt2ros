@@ -5,7 +5,7 @@ from nclt2ros.transformer.coordinate_frame import CoordinateFrame
 
 
 class GroundTruth(Plotter):
-    """Class to visualize the ground truth as a kml and png file
+    """Class to visualize the ground truth data as a kml and png file
 
     USAGE:
             GroundTruth(date='2013-01-10', output_file='ground_truth')
@@ -100,7 +100,6 @@ class GroundTruth(Plotter):
 
     def save_roll_png(self):
         """visualize the roll angle as a png file
-
         """
 
         plt.plot(self.utimes, self.roll_rad, color="blue", label='roll angle')
@@ -116,7 +115,6 @@ class GroundTruth(Plotter):
 
     def save_pitch_png(self):
         """visualize the pitch angle as a png file
-
         """
         plt.plot(self.utimes, self.pitch_rad, color="blue", label='pitch angle')
 
@@ -131,7 +129,6 @@ class GroundTruth(Plotter):
 
     def save_yaw_png(self):
         """visualize the yaw angle as a png file
-
         """
         plt.plot(self.utimes, self.yaw_rad, color="blue", label='yaw angle')
 
@@ -143,3 +140,10 @@ class GroundTruth(Plotter):
         plt.title('Yaw angle from Ground Truth')
         plt.savefig(self.visualization_png_gt_dir + self.output_file + '_yaw.png')
         plt.show()
+
+    def get_png_gt_dir(self):
+        """get the png ground truth directory
+
+        :return: path to png ground truth directory
+        """
+        return self.visualization_png_gt_dir

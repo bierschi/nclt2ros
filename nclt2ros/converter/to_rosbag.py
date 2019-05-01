@@ -2,6 +2,7 @@ import rosbag
 import os
 import subprocess
 import sys
+import rospy
 
 from nclt2ros.extractor.read_ground_truth import ReadGroundTruth
 from nclt2ros.extractor.read_ground_truth_covariance import ReadGroundTruthCovariance
@@ -98,7 +99,7 @@ class ToRosbag(BaseRawData, BaseConvert):
         i_vel     = 0
         i_img     = 0
 
-        print("loading data ...")
+        rospy.loginfo("loading data ...")
 
         # load ground_truth data
         if self.gt:
@@ -128,7 +129,7 @@ class ToRosbag(BaseRawData, BaseConvert):
         if self.cam_folder is not None and self.lb3:
             images_timestamps_microsec = self.image_data.get_image_timestamps()
 
-        print("loaded data, writing to rosbag ...")
+        rospy.loginfo("data loaded, writing to rosbag %s" % self.bag_name)
 
         max_num_messages = 1e20
         num_messages = 0
@@ -241,7 +242,7 @@ class ToRosbag(BaseRawData, BaseConvert):
                 try:
                     hits = self.velodyne_sync_data.read_next_velodyne_sync_packet(vel_sync_bin_files[i_vel])
                 except ValueError:
-                    print("Error velodyne")
+                    rospy.logerr("error in sync velodyne packet")
 
                 timestamp, pc2_msg, tf_static_msg = self.velodyne_sync_data.xyzil_array_to_pointcloud2(utime=vel_sync_timestamps_microsec[i_vel], hits=hits)
                 self.bag.write(self.velodyne_topic, pc2_msg, t=timestamp)
@@ -262,16 +263,16 @@ class ToRosbag(BaseRawData, BaseConvert):
                     self.bag.write('/tf_static', tf_static_msg, t=timestamp)
                 i_img += 1
             else:
-                print "unkown packet type"
+                rospy.logerr("unknown packet type")
 
             num_messages += 1
             if (num_messages % 1000) == 0:
-                print "number messages written: ", num_messages
+                rospy.loginfo("number messages written: %d" % num_messages)
 
             if num_messages >= max_num_messages:
                 break
 
-        print("successfully created rosbag file")
+        rospy.loginfo("successfully finished converting!")
         self.bag.close()
 
         #self.compress_bag()

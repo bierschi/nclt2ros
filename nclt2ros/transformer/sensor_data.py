@@ -9,6 +9,7 @@ from sensor_msgs.msg import NavSatStatus, NavSatFix, Imu, MagneticField
 from nav_msgs.msg import Odometry
 from std_msgs.msg import UInt16, Float64
 from nclt2ros.extractor.base_raw_data import BaseRawData
+from nclt2ros.converter.base_convert import BaseConvert
 
 # default COVARIANCE matrices
 IMU_ORIENT_COVAR = [1e-3, 0, 0,
@@ -35,7 +36,7 @@ POSE_COVAR       = [1e-3, 0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0, 1e-3]
 
 
-class RosSensorMsg(BaseRawData):
+class RosSensorMsg(BaseRawData, BaseConvert):
     """Class to convert the sensor_data directory to ROS messages
 
     USAGE:
@@ -44,8 +45,9 @@ class RosSensorMsg(BaseRawData):
     """
     def __init__(self, date):
 
-        # init base class
+        # init base classes
         BaseRawData.__init__(self, date=date)
+        BaseConvert.__init__(self, date=date)
 
         # create transformer
         self.tf_broadcast = tf.TransformBroadcaster()
@@ -86,8 +88,8 @@ class RosSensorMsg(BaseRawData):
         timestamp = rospy.Time.from_sec(utime / 1e6)
 
         # get gps and base link
-        gps_link = self.json_configs['frame_ids']['gps_sensor']
-        base_link = self.json_configs['frame_ids']['body']
+        gps_link = self.gps_frame
+        base_link = self.body_frame
 
         # fill NavSat message
         status = NavSatStatus()
@@ -164,8 +166,8 @@ class RosSensorMsg(BaseRawData):
         timestamp = rospy.Time.from_sec(utime / 1e6)
 
         # get gps_rtk and base link
-        gps_rtk_link = self.json_configs['frame_ids']['gps_rtk_sensor']
-        base_link    = self.json_configs['frame_ids']['body']
+        gps_rtk_link = self.gps_rtk_frame
+        base_link    = self.body_frame
 
         # fill NavSat message
         status = NavSatStatus()
@@ -261,8 +263,8 @@ class RosSensorMsg(BaseRawData):
         timestamp = rospy.Time.from_sec(utime / 1e6)
 
         # get wheel odometry and body link
-        wheel_odom_link = str(self.json_configs['frame_ids']['wheel_odometry'])
-        base_link       = str(self.json_configs['frame_ids']['body'])
+        wheel_odom_link = str(self.odom_frame)
+        base_link       = str(self.body_frame)
 
         # create ros odometry message
         odom = Odometry()
@@ -399,8 +401,8 @@ class RosSensorMsg(BaseRawData):
         timestamp = rospy.Time.from_sec(utime / 1e6)
 
         # get imu and base link
-        imu_link   = self.json_configs['frame_ids']['imu_sensor']
-        base_link  = self.json_configs['frame_ids']['body']
+        imu_link   = self.imu_frame
+        base_link  = self.body_frame
 
         # create ros imu message
         imu = Imu()
@@ -495,7 +497,7 @@ class RosSensorMsg(BaseRawData):
         timestamp = rospy.Time.from_sec(utime / 1e6)
 
         # get ground truth link
-        gt_link = str(self.json_configs['frame_ids']['ground_truth'])
+        gt_link = str(self.ground_truth_frame)
 
         # create odometry message for ground truth
         gt = Odometry()

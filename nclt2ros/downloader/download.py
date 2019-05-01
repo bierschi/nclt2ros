@@ -5,8 +5,9 @@ import subprocess
 
 class Download:
     """Class to download the NCLT Dataset from http://robots.engin.umich.edu/nclt/
+
     USAGE:
-            Download(date='2013-01-10', output_path='/home/christian/', gt=True)
+            Download(date='2013-01-10', raw_data_path='/home/christian/nclt2ros/raw_data', gt=True)
     """
 
     def __init__(self, date, raw_data_path, lb3=False, sen=False, hokuyo=False, vel=False, gt=False, gt_cov=False):
@@ -44,33 +45,28 @@ class Download:
             raise ValueError("Given 'Date' is not in dataset")
 
     def print_log(self):
-        """
-        prints statement and writes to log file
+        """method for logging purposes
         """
 
-        print "Download"
-        rospy.loginfo("Download ")
+        rospy.loginfo("Download: ")
 
         if self.lb3:
-            print "- Images"
+            rospy.loginfo("- Images")
         if self.sen:
-            print "- Sensors"
+            rospy.loginfo("- Sensors")
         if self.hokuyo:
-            print "- Hokuyo"
+            rospy.loginfo("- Hokuyo")
         if self.vel:
-            print "- Velodyne"
+            rospy.loginfo("- Velodyne")
         if self.gt:
-            print "- Ground Truth Pose"
             rospy.loginfo("- Ground Truth Pose")
         if self.gt_cov:
-            print "- Ground Truth Covariance"
+            rospy.loginfo("- Ground Truth Covariance")
 
-        print("from date %s " % self.date)
         rospy.loginfo("from date %s " % self.date)
 
     def load_dataset(self):
-        """
-        load data depending on the arguments specified in the launch file
+        """load data depending on the arguments specified in the launch file
         """
 
         self.saved_path = os.getcwd()
@@ -97,11 +93,11 @@ class Download:
         os.chdir(self.saved_path)
 
     def check_date(self, date):
-        """
-        checks if date is in self.dates
+        """checks if date is in self.dates
+
         :param date: String
         :return: Bool, True if date is in self.dates
-                       else False
+                  else False
         """
 
         if date in self.dates:
@@ -110,55 +106,55 @@ class Download:
             return False
 
     def get_images(self):
-        """
-        fetching the raw image data with wget and the continue flag for later continuation
+        """fetching the raw image data with wget and the continue flag for later continuation
         """
 
         cmd = ['wget', '--continue', '%s/images/%s_lb3.tar.gz' % (self.download_url_dir, self.date), '-P', 'images']
-        print "Calling: ", ' '.join(cmd)
+        cmd_str = ' '.join(cmd)
+        rospy.loginfo("Calling: %s" % cmd_str)
         subprocess.call(cmd)
 
     def get_sensors(self):
-        """
-        fetching the raw sensors data with wget and the continue flag for later continuation
+        """fetching the raw sensors data with wget and the continue flag for later continuation
         """
 
         cmd = ['wget', '--continue', '%s/sensor_data/%s_sen.tar.gz' % (self.download_url_dir, self.date), '-P', 'sensor_data']
-        print "Calling: ", ' '.join(cmd)
+        cmd_str = ' '.join(cmd)
+        rospy.loginfo("Calling: %s" % cmd_str)
         subprocess.call(cmd)
 
     def get_velodyne(self):
-        """
-        fetching the raw velodyne data with wget and the continue flag for later continuation
+        """fetching the raw velodyne data with wget and the continue flag for later continuation
         """
 
         cmd = ['wget', '--continue', '%s/velodyne_data/%s_vel.tar.gz' % (self.download_url_dir, self.date), '-P', 'velodyne_data']
-        print "Calling: ", ' '.join(cmd)
+        cmd_str = ' '.join(cmd)
+        rospy.loginfo("Calling: %s" % cmd_str)
         subprocess.call(cmd)
 
     def get_hokuyo(self):
-        """
-        fetching the raw hokuyo data with wget and the continue flag for later continuation
+        """fetching the raw hokuyo data with wget and the continue flag for later continuation
         """
 
         cmd = ['wget', '--continue', '%s/hokuyo_data/%s_hokuyo.tar.gz' % (self.download_url_dir, self.date), '-P', 'hokuyo_data']
-        print "Calling: ", ' '.join(cmd)
+        cmd_str = ' '.join(cmd)
+        rospy.loginfo("Calling: %s" % cmd_str)
         subprocess.call(cmd)
 
     def get_ground_truth_pose(self):
-        """
-        fetching the raw ground truth pose data with wget and the continue flag for later continuation
+        """fetching the raw ground truth pose data with wget and the continue flag for later continuation
         """
 
         cmd = ['wget', '--continue', '%s/ground_truth/groundtruth_%s.csv' % (self.download_url_dir, self.date), '-P', 'ground_truth']
-        print "Calling: ", ' '.join(cmd)
+        cmd_str = ' '.join(cmd)
+        rospy.loginfo("Calling: %s" % cmd_str)
         subprocess.call(cmd)
 
     def get_ground_truth_cov(self):
-        """
-        fetching the raw ground truth covariance data with wget and the continue flag for later continuation
+        """fetching the raw ground truth covariance data with wget and the continue flag for later continuation
         """
 
         cmd = ['wget', '--continue', '%s/covariance/cov_%s.csv' % (self.download_url_dir, self.date), '-P', 'ground_truth_covariance']
-        print "Calling: ", ' '.join(cmd)
+        cmd_str = ' '.join(cmd)
+        rospy.loginfo("Calling: %s" % cmd_str)
         subprocess.call(cmd)

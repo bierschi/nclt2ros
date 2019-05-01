@@ -1,17 +1,18 @@
 import os
 import tarfile
+import rospy
 from base_raw_data import BaseRawData
 
 
 class Extract(BaseRawData):
-    """Class to extract the tarballs in raw data
+    """Class to extract the tarballs in param 'raw_data_path'
 
     USAGE:
-            ExtractRawData('2013-01-10', '/home/christian/nclt2ros/raw_data')
+            ExtractRawData('2013-01-10')
 
     """
 
-    def __init__(self, date, raw_data_path, lb3=False, sen=False, vel=False, hokuyo=False):
+    def __init__(self, date, lb3=False, sen=False, vel=False, hokuyo=False):
 
         if isinstance(date, str):
             self.date = date
@@ -19,7 +20,7 @@ class Extract(BaseRawData):
             raise TypeError("'date' must be type of string")
 
         # init base class
-        BaseRawData.__init__(self, date=date, raw_data_path=raw_data_path)
+        BaseRawData.__init__(self, date=date)
 
         self.lb3    = lb3
         self.sen    = sen
@@ -27,14 +28,13 @@ class Extract(BaseRawData):
         self.hokuyo = hokuyo
 
         if self.lb3 or self.sen or self.vel or self.hokuyo:
-            print("Extracting data from %s" % self.date)
+            rospy.loginfo("Extracting data from %s" % self.date)
             self.extract_data()
         else:
-            print("Nothing to extract")
+            rospy.loginfo("Nothing to extract")
 
     def extract_data(self):
         """extracts the data from tar.gz format
-
         """
 
         # check hokuyo_data
@@ -45,14 +45,14 @@ class Extract(BaseRawData):
                 if not (self.date in files):
                     for file in files:
                         if file.endswith('tar.gz'):
-                            print("unpacking {}".format(file))
+                            rospy.loginfo("unpacking {}".format(file))
                             tar = tarfile.open(file, 'r:gz')
                             tar.extractall()
                             tar.close()
                             # remove tar.gz file
                             os.remove(file)
                 else:
-                    print("hokuyo_data already exists")
+                    rospy.loginfo("hokuyo_data already exists")
 
         # check sensor_data
         if self.sen:
@@ -62,7 +62,7 @@ class Extract(BaseRawData):
                 if not (self.date in files):
                     for file in files:
                         if file.endswith('tar.gz'):
-                            print("unpacking {}".format(file))
+                            rospy.loginfo("unpacking {}".format(file))
                             tar = tarfile.open(file, 'r:gz')
                             tar.extractall()
                             tar.close()
@@ -70,7 +70,7 @@ class Extract(BaseRawData):
                             os.remove(file)
 
                 else:
-                    print("sensor_data already exists")
+                    rospy.loginfo("sensor_data already exists")
 
         # check velodyne_data
         if self.vel:
@@ -80,14 +80,14 @@ class Extract(BaseRawData):
                 if not (self.date in files):
                     for file in files:
                         if file.endswith('tar.gz'):
-                            print("unpacking {}".format(file))
+                            rospy.loginfo("unpacking {}".format(file))
                             tar = tarfile.open(file, 'r:gz')
                             tar.extractall()
                             tar.close()
                             # remove tar.gz file
                             os.remove(file)
                 else:
-                    print("velodyne_data already exists")
+                    rospy.loginfo("velodyne_data already exists")
 
         # check image_data
         if self.lb3:
@@ -97,11 +97,11 @@ class Extract(BaseRawData):
                 if not (self.date in files):
                     for file in files:
                         if file.endswith('tar.gz'):
-                            print("unpacking {}".format(file))
+                            rospy.loginfo("unpacking {}".format(file))
                             tar = tarfile.open(file, 'r:gz')
                             tar.extractall()
                             tar.close()
                             # remove tar.gz file
                             os.remove(file)
                 else:
-                    print("image_data already exists")
+                    rospy.loginfo("image_data already exists")

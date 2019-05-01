@@ -1,19 +1,19 @@
 <launch>
     # convert
-    <node name="nclt2rosbag" pkg="nclt2ros" type="nclt2rosbag" >
+    <node name="nclt2rosbag" pkg="nclt2ros" type="nclt2rosbag" output="screen">
 
         <param name="date"               value="2013-01-10"/>
-        <param name="raw_data_path"      value="/home/christian/nclt2ros/raw_data" />
+        <param name="raw_data_path"      value="/home/christian/projects/nclt2rosbag/nclt2rosbag/raw_data" />
         <param name="rosbag_output_path" value="/home/christian/nclt2ros/rosbags" />
         <param name="bag_name"           value="nclt" />
         <param name="cam_folder"         value="5" />
 
         # specify data to convert
         <param name="lb3"                value="False" />
-        <param name="sen"                value="False" />
-        <param name="vel"                value="False" />
-        <param name="hokuyo"             value="False" />
-        <param name="gt"                 value="False" />
+        <param name="sen"                value="True" />
+        <param name="vel"                value="True" />
+        <param name="hokuyo"             value="True" />
+        <param name="gt"                 value="True" />
 
         # topic names
         <param name="gps_fix"            value="/navsat/fix" />
