@@ -73,17 +73,24 @@ class ToRosbag(BaseRawData, BaseConvert):
         self.ros_sensor_msg = RosSensorMsg(self.date)
 
         # create rosbag file and check name
-        os.chdir(self.rosbag_dir)
         self.bag_name = str(bag_name)
-        if self.bag_name.endswith('.bag'):
-            self.bag = rosbag.Bag(self.bag_name, 'w')
-        else:
-            self.bag = rosbag.Bag(self.bag_name + '.bag', 'w')
+
+        if not self.bag_name.endswith('.bag'):
+            self.bag_name = self.bag_name + '.bag'
+
+        os.chdir(self.rosbag_dir)
+        # check if file already exists
+        if os.path.isfile(self.rosbag_dir + '/' + self.bag_name):
+            rospy.loginfo("rosbag file %s already exists" % self.bag_name)
+            self.bag_name = self.bag_name.split('.')[0] + '_2' + '.bag'
+
+        # create rosbag file
+        self.bag = rosbag.Bag(self.bag_name, 'w')
 
     def __del__(self):
         """destructor
         """
-
+        rospy.loginfo("close rosbag file")
         self.bag.close()
 
     def process(self):
@@ -129,12 +136,12 @@ class ToRosbag(BaseRawData, BaseConvert):
         if self.cam_folder is not None and self.lb3:
             images_timestamps_microsec = self.image_data.get_image_timestamps()
 
-        rospy.loginfo("data loaded, writing to rosbag %s" % self.bag_name)
+        rospy.loginfo("data loaded, writing to rosbag file %s" % self.bag_name)
 
         max_num_messages = 1e20
         num_messages = 0
 
-        while True:
+        while not rospy.is_shutdown():
             next_packet = "done"
             next_utime = -1
 
@@ -176,8 +183,6 @@ class ToRosbag(BaseRawData, BaseConvert):
                 if i_img < len(images_timestamps_microsec) and (images_timestamps_microsec[i_img] < next_utime or next_utime < 0):
                     next_utime = images_timestamps_microsec[i_img]
                     next_packet = "img"
-
-            # print 'next_packet: ', next_packet
 
             if next_packet == "done":
                 break
@@ -266,19 +271,21 @@ class ToRosbag(BaseRawData, BaseConvert):
                 rospy.logerr("unknown packet type")
 
             num_messages += 1
-            if (num_messages % 1000) == 0:
+            if (num_messages % 5000) == 0:
                 rospy.loginfo("number messages written: %d" % num_messages)
 
             if num_messages >= max_num_messages:
                 break
 
-        rospy.loginfo("successfully finished converting!")
-        self.bag.close()
+        if not rospy.is_shutdown():
+            self.bag.close()
+            rospy.loginfo("successfully finished converting!")
 
         #self.compress_bag()
 
     def compress_bag(self):
 
+        # TODO compress bag if file not to big
         files = os.listdir(self.rosbag_dir)
         try:
 
