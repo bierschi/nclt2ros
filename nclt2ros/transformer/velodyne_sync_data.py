@@ -8,9 +8,10 @@ import tf.transformations
 
 from sensor_msgs.msg import PointCloud2, PointField
 from nclt2ros.extractor.base_raw_data import BaseRawData
+from nclt2ros.converter.base_convert import BaseConvert
 
 
-class VelodyneSyncData(BaseRawData):
+class VelodyneSyncData(BaseRawData, BaseConvert):
     """Class to transform the velodyne_sync binary files to ROS PointCloud2 messages
 
     USAGE:
@@ -19,8 +20,9 @@ class VelodyneSyncData(BaseRawData):
     """
     def __init__(self, date):
 
-        # init base class
+        # init base classes
         BaseRawData.__init__(self, date=date)
+        BaseConvert.__init__(self, date=date)
 
     def get_velodyne_sync_timestamps_and_files(self):
         """returns the timestamps and binary files in a sorted manner
@@ -109,8 +111,8 @@ class VelodyneSyncData(BaseRawData):
         points = np.array(hits)
 
         # get velodyne and base link
-        velodyne_link = self.json_configs['frame_ids']['velodyne_lidar']
-        base_link = self.json_configs['frame_ids']['body']
+        velodyne_link = self.velodyne_frame
+        base_link = self.body_frame
 
         # create a PointCloud2 message
         pc2_msg = PointCloud2()

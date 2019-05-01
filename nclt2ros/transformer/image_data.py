@@ -9,9 +9,10 @@ import tf.transformations
 
 from PIL import Image as pilImage
 from nclt2ros.extractor.base_raw_data import BaseRawData
+from nclt2ros.converter.base_convert import BaseConvert
 
 
-class ImageData(BaseRawData):
+class ImageData(BaseRawData, BaseConvert):
     """Class to transform the images from the ladybug camera
 
     USAGE:
@@ -22,6 +23,7 @@ class ImageData(BaseRawData):
 
         # init base class
         BaseRawData.__init__(self, date=date)
+        BaseConvert.__init__(self, date=date)
 
         # create a cv bridge
         self.bridge = cv_bridge.CvBridge()
@@ -50,8 +52,8 @@ class ImageData(BaseRawData):
         timestamp = rospy.Time.from_sec(utime / 1e6)
 
         # get image and base link
-        camera_link = self.json_configs['frame_ids']['ladybug_sensor']
-        base_link = self.json_configs['frame_ids']['body']
+        camera_link = self.ladybug_frame
+        base_link = self.body_frame
 
         cv_img = cv2.imread(cam_file)
         cv_img = cv2.rotate(cv_img, rotateCode=0)  # 90 deg

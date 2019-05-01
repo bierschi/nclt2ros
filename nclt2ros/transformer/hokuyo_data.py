@@ -7,9 +7,10 @@ import tf.transformations
 
 from sensor_msgs.msg import LaserScan
 from nclt2ros.extractor.base_raw_data import BaseRawData
+from nclt2ros.converter.base_convert import BaseConvert
 
 
-class HokuyoData(BaseRawData):
+class HokuyoData(BaseRawData, BaseConvert):
     """Class to transform the hokuyo binary data to ROS LaserScan messages
 
     USAGE:
@@ -18,8 +19,9 @@ class HokuyoData(BaseRawData):
     """
     def __init__(self, date):
 
-        # init base class
+        # init base classes
         BaseRawData.__init__(self, date=date)
+        BaseConvert.__init__(self, date=date)
 
         # load binary files
         if self.hokuyo_data_flag:
@@ -90,8 +92,8 @@ class HokuyoData(BaseRawData):
             timestamp = rospy.Time.from_sec(utime / 1e6)
 
             # get hokuyo and base link
-            hokuyo_urg_link = self.json_configs['frame_ids']['hokuyo_urg_lidar']
-            base_link       = self.json_configs['frame_ids']['body']
+            hokuyo_urg_link = self.hok_urg_frame
+            base_link       = self.body_frame
 
             # create a LaserScan message
             scan = LaserScan()
@@ -172,8 +174,8 @@ class HokuyoData(BaseRawData):
             timestamp = rospy.Time.from_sec(utime / 1e6)
 
             # get hokuyo and base link
-            hokuyo_utm_link = self.json_configs['frame_ids']['hokuyo_utm_lidar']
-            base_link       = self.json_configs['frame_ids']['body']
+            hokuyo_utm_link = self.hok_utm_frame
+            base_link       = self.body_frame
 
             # create LaserScan message
             scan = LaserScan()

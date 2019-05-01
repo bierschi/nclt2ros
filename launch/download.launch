@@ -1,13 +1,13 @@
 <launch>
     # download
-    <node name="nclt2ros" pkg="nclt2ros" type="nclt2downloader" >
+    <node name="nclt2ros" pkg="nclt2ros" type="nclt2downloader" output="screen">
 
         <param name="date"            value="2013-01-10"/>
         <param name="raw_data_path"   value="/home/christian/nclt2ros/raw_data" />
 
         <param name="lb3"             value="False" />
-        <param name="sen"             value="False" />
-        <param name="vel"             value="True" />
+        <param name="sen"             value="True" />
+        <param name="vel"             value="False" />
         <param name="hokuyo"          value="False" />
         <param name="gt"              value="True" />
         <param name="gt_cov"          value="True" />

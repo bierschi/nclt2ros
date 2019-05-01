@@ -24,7 +24,7 @@ def main():
 
     loader = Download(date=date, raw_data_path=raw_data_path, lb3=lb3, sen=sen, vel=vel, hokuyo=hokuyo, gt=gt, gt_cov=gt_cov)
 
-    extractor = Extract(date=date, raw_data_path=raw_data_path, lb3=lb3, sen=sen, vel=vel, hokuyo=hokuyo)
+    extractor = Extract(date=date, lb3=lb3, sen=sen, vel=vel, hokuyo=hokuyo)
 
 
 if __name__ == '__main__':

@@ -4,9 +4,10 @@ import rospy
 
 from sensor_msgs.msg import PointCloud2, PointField
 from nclt2ros.extractor.base_raw_data import BaseRawData
+from nclt2ros.converter.base_convert import BaseConvert
 
 
-class VelodyneData(BaseRawData):
+class VelodyneData(BaseRawData, BaseConvert):
     """Class to convert the velodyne binary file to ROS PointCloud2 messages
 
     USAGE:
@@ -17,6 +18,7 @@ class VelodyneData(BaseRawData):
 
         # init base class
         BaseRawData.__init__(self, date=date)
+        BaseConvert.__init__(self, date=date)
 
         # load velodyne_binary file
         if self.velodyne_data_flag:
@@ -108,7 +110,7 @@ class VelodyneData(BaseRawData):
 
         pc2_msg = PointCloud2()
         pc2_msg.header.stamp = timestamp
-        pc2_msg.header.frame_id = self.json_configs['frame_ids']['velodyne_lidar']
+        pc2_msg.header.frame_id = self.velodyne_frame
 
         num_values = points.shape[0]
         assert(num_values > 0)

@@ -15,6 +15,7 @@ class BaseRawData:
         self.date = date
 
         RAW_DATA_PATH_DFLT = ROOT_DIR + '/raw_data/'
+        #RAW_DATA_PATH_DFLT = '/home/christian/projects/nclt2rosbag/nclt2rosbag/raw_data'
         raw_data_path = rospy.get_param('~raw_data_path', RAW_DATA_PATH_DFLT)
 
         self.raw_data_path = raw_data_path
