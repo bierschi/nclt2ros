@@ -87,46 +87,46 @@ launch file for converting the raw data to rosbag files
     # download
     <node name="nclt2ros" pkg="nclt2ros"  type="nclt2rosbag" output="screen">
     
-        <param name="date"                value="2013-01-10"/>
-        <param name="raw_data_path"       value="/home/christian/nclt2ros/raw_data" />
-        <param name="rosbag_output_path"  value="/home/christian/nclt2ros/rosbags"/>
-        <param name="bag_name"            value="nclt" />
-        <param name="cam_folder"          value="5"/>
+        <param name="date"                  value="2013-01-10"/>
+        <param name="raw_data_path"         value="/home/christian/nclt2ros/raw_data" />
+        <param name="rosbag_output_path"    value="/home/christian/nclt2ros/rosbags"/>
+        <param name="bag_name"              value="nclt" />
+        <param name="cam_folder"            value="5"/>
         
         # specify data to convert
-        <param name="lb3"                 value="False" />
-        <param name="sen"                 value="True" />
-        <param name="vel"                 value="True" />
-        <param name="hokuyo"              value="True" />
-        <param name="gt"                  value="True" />
+        <param name="lb3"                   value="False" />
+        <param name="sen"                   value="True" />
+        <param name="vel"                   value="True" />
+        <param name="hokuyo"                value="True" />
+        <param name="gt"                    value="True" />
         
         # topic names
-        <param name="gps_fix"             value="/navsat/fix" />
-        <param name="gps_track"           value="/navsat/track" />
-        <param name="gps__speed"          value="/navsat/speed" />
-        <param name="gps_rtk_fix"         value="/navsat/rtk/fix" />
-        <param name="gps_rtk_track"       value="/navsat/rtk/track" />
-        <param name="gps_rtk_speed"       value="/navsat/rtk/speed" />
-        <param name="ms25_imu_data"       value="/imu/data" />
-        <param name="ms25_imu_mag"        value="/imu/mag" />
-        <param name="wheel_odometry"      value="/odom" />
-        <param name="hokuyo_utm_lidar"    value="/hokuyo_30m" />
-        <param name="hokuyo_urg_lidar"    value="/hokuyo_4m" />
-        <param name="velodyne_lidar"      value="/velodyne_points" />
-        <param name="ladybug_sensor"      value="/images/raw" />
-        <param name="ground_truth"        value="/ground_truth" />
+        <param name="gps_fix"               value="/navsat/fix" />
+        <param name="gps_track"             value="/navsat/track" />
+        <param name="gps__speed"            value="/navsat/speed" />
+        <param name="gps_rtk_fix"           value="/navsat/rtk/fix" />
+        <param name="gps_rtk_track"         value="/navsat/rtk/track" />
+        <param name="gps_rtk_speed"         value="/navsat/rtk/speed" />
+        <param name="ms25_imu_data"         value="/imu/data" />
+        <param name="ms25_imu_mag"          value="/imu/mag" />
+        <param name="wheel_odometry_topic"  value="/odom" />
+        <param name="hokuyo_utm_topic"      value="/hokuyo_30m" />
+        <param name="hokuyo_urg_topic"      value="/hokuyo_4m" />
+        <param name="velodyne_topic"        value="/velodyne_points" />
+        <param name="ladybug_topic"         value="/images/raw" />
+        <param name="ground_truth_topic"    value="/ground_truth" />
         
         # frame ids
-        <param name="gps_sensor"          value="gps_link" />
-        <param name="gps_rtk_sensor"      value="gps_rtk_link" />
-        <param name="imu_sensor"          value="imu_link" />
-        <param name="wheel_odometry"      value="odom" />
-        <param name="hokuyo_utm_lidar"    value="laser_utm" />
-        <param name="hokuyo_urg_lidar"    value="laser_urg" />
-        <param name="velodyne_lidar"      value="velodyne" />
-        <param name="ladybug_sensor"      value="camera" />
-        <param name="ground_truth"        value="ground_truth_link" />
-        <param name="body"                value="base_link" />
+        <param name="gps_sensor"            value="gps_link" />
+        <param name="gps_rtk_sensor"        value="gps_rtk_link" />
+        <param name="imu_sensor"            value="imu_link" />
+        <param name="wheel_odometry_sensor" value="odom" />
+        <param name="hokuyo_utm_lidar"      value="laser_utm" />
+        <param name="hokuyo_urg_lidar"      value="laser_urg" />
+        <param name="velodyne_lidar"        value="velodyne" />
+        <param name="ladybug_sensor"        value="camera" />
+        <param name="ground_truth"          value="ground_truth_link" />
+        <param name="body"                  value="base_link" />
         
     </node>
 </launch>
@@ -165,9 +165,7 @@ roslaunch nclt2ros download.launch
 
 ## Examples
 
-<pre><code>
-./nclt2rosbag.py visualize 2013-01-10 --all
-</pre></code>
+visualized all data as a png file
 
 <div align="left">
   <br>
