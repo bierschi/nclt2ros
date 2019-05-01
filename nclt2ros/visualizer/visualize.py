@@ -95,5 +95,5 @@ class Visualize:
             rospy.loginfo("successfully created raw_data_all png file in %s" % png_all_dir)
 
         else:
-            rospy.loginfo("no matching arguments were found")
+            rospy.loginfo("no matching parameters were found")
 

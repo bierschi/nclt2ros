@@ -38,12 +38,12 @@ class BaseConvert:
         self.gps_rtk_speed_topic = rospy.get_param('~gps_rtk_speed', '/navsat/rtk/speed')
         self.imu_data_topic      = rospy.get_param('~ms25_imu_data', '/imu/data')
         self.imu_mag_topic       = rospy.get_param('~ms25_imu_mag', '/imu/mag')
-        self.odom_topic          = rospy.get_param('~wheel_odometry', '/odom')
-        self.hokuyo_utm_topic    = rospy.get_param('~hokuyo_utm_lidar', '/hokuyo_30m')
-        self.hokuyo_urg_topic    = rospy.get_param('~hokuyo_urg_lidar', '/hokuyo_4m')
-        self.velodyne_topic      = rospy.get_param('~velodyne_lidar', '/velodyne_points')
-        self.ladybug_topic       = rospy.get_param('~ladybug_sensor', '/images/raw')
-        self.ground_truth_topic  = rospy.get_param('~ground_truth', '/ground_truth')
+        self.odom_topic          = rospy.get_param('~wheel_odometry_topic', '/odom')
+        self.hokuyo_utm_topic    = rospy.get_param('~hokuyo_utm_topic', '/hokuyo_30m')
+        self.hokuyo_urg_topic    = rospy.get_param('~hokuyo_urg_topic', '/hokuyo_4m')
+        self.velodyne_topic      = rospy.get_param('~velodyne_topic', '/velodyne_points')
+        self.ladybug_topic       = rospy.get_param('~ladybug_topic', '/images/raw')
+        self.ground_truth_topic  = rospy.get_param('~ground_truth_topic', '/ground_truth')
 
         # init frame ids
         self.gps_frame = rospy.get_param('~gps_sensor', 'gps_link')
