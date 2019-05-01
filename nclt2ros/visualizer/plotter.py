@@ -63,3 +63,10 @@ class Plotter:
         self.red = simplekml.Color.red
         self.yellow = simplekml.Color.yellow
         self.magenta = simplekml.Color.magenta
+
+    def get_kml_dir(self):
+        """get the kml directory
+
+        :return: path to kml directory
+        """
+        return self.visualization_kml_dir

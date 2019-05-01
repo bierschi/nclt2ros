@@ -24,7 +24,6 @@ class AllSensors(Plotter, GroundTruth, GPS_RTK, GPS, WheelOdom):
 
     def plot(self):
         """visualize all data in one plot
-
         """
 
         gt_x, gt_y = self.get_gt_data(offset=True)
@@ -46,3 +45,10 @@ class AllSensors(Plotter, GroundTruth, GPS_RTK, GPS, WheelOdom):
         plt.savefig(self.visualization_png_all_dir + 'raw_data_all.png')
 
         plt.show()
+
+    def get_png_all_dir(self):
+        """get the png all sensors directory
+
+        :return: path to png all sensors directory
+        """
+        return self.visualization_png_all_dir

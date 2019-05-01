@@ -4,7 +4,7 @@ from nclt2ros.transformer.coordinate_frame import CoordinateFrame
 
 
 class WheelOdom(Plotter):
-    """Class to visualize the wheel odometry as a kml and png file
+    """Class to visualize the wheel odometry data as a kml and png file
 
     USAGE:
             WheelOdom(date='2013-01-10', output_file='wheel_odom')
@@ -27,8 +27,7 @@ class WheelOdom(Plotter):
         self.wheel_odom = self.reader.read_odometry_mu_100hz_csv(all_in_one=True)
 
     def save_kml_line(self):
-        """visualize wheel odometry as a kml file
-
+        """visualize wheel odometry data as a kml file
         """
 
         wheel_odom_x = self.wheel_odom[:, 1]
@@ -62,8 +61,7 @@ class WheelOdom(Plotter):
         return wheel_odom_x, wheel_odom_y
 
     def save_wheel_odom_png(self):
-        """visualize wheel odometry as a png file
-
+        """visualize wheel odometry data as a png file
         """
         wheel_odom_x, wheel_odom_y = self.get_wheel_odom_data()
 
@@ -77,4 +75,11 @@ class WheelOdom(Plotter):
         plt.savefig(self.visualization_png_wheel_odom_dir + 'wheel_odom.png')
 
         plt.show()
+
+    def get_png_odom_dir(self):
+        """get the png odom directory
+
+        :return: path to png odom directory
+        """
+        return self.visualization_png_wheel_odom_dir
 

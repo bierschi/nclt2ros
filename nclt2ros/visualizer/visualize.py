@@ -1,3 +1,4 @@
+import rospy
 from nclt2ros.visualizer.gt         import GroundTruth
 from nclt2ros.visualizer.gps        import GPS
 from nclt2ros.visualizer.gps_rtk    import GPS_RTK
@@ -6,10 +7,10 @@ from nclt2ros.visualizer.all        import AllSensors
 
 
 class Visualize:
-    """Class to visualize depending on the arguments
+    """Class to visualize the raw data depending on the parameter specified in the launch file
 
     USAGE:
-            Visualize(args=args)
+            Visualize(date='2013-01-10')
 
     """
     def __init__(self, date, **kwargs):
@@ -31,59 +32,68 @@ class Visualize:
                 setattr(self, key, value)
 
         if self.v_gt_kml:
-            print("visualize ground truth kml from %s" % self.date)
+            rospy.loginfo("visualize ground truth kml from date %s" % self.date)
             self.gt = GroundTruth(date=self.date)
             self.gt.save_kml_line()
-            print("successfully created ground truth kml file in /plots/%s/kml/" % self.date)
+            kml_dir = self.gt.get_kml_dir()
+            rospy.loginfo("successfully created ground truth kml file in %s" % kml_dir)
 
         if self.v_gt_png:
-            print("visualize ground truth png from %s" % self.date)
+            rospy.loginfo("visualize ground truth png from date %s" % self.date)
             self.gt = GroundTruth(date=self.date)
             self.gt.save_gt_png(offset=True)
-            print("successfully created ground truth png file in /plots/%s/png/" % self.date)
+            png_gt_dir = self.gt.get_png_gt_dir()
+            rospy.loginfo("successfully created ground truth png file in %s" % png_gt_dir)
 
         if self.v_gps_kml:
-            print("visualize gps kml from %s" % self.date)
+            rospy.loginfo("visualize gps kml from date %s" % self.date)
             self.gps = GPS(date=self.date)
             self.gps.save_kml_line()
-            print("successfully created gps kml file in /plots/%s/kml/" % self.date)
+            kml_dir = self.gps.get_kml_dir()
+            rospy.loginfo("successfully created gps kml file in %s" % kml_dir)
 
         if self.v_gps_png:
-            print("visualize gps png from %s" % self.date)
+            rospy.loginfo("visualize gps png from %s" % self.date)
             self.gps = GPS(date=self.date)
             self.gps.save_gps_png()
-            print("successfully created gps png file in /plots/%s/png/" % self.date)
+            png_gps_dir = self.gps.get_png_gps_dir()
+            rospy.loginfo("successfully created gps png file in %s" % png_gps_dir)
 
         if self.v_gps_rtk_kml:
-            print("visualize gps_rtk kml from %s" % self.date)
+            rospy.loginfo("visualize gps_rtk kml from date %s" % self.date)
             self.gps_rtk = GPS_RTK(date=self.date)
             self.gps_rtk.save_kml_line()
-            print("successfully created gps_rtk kml file in /plots/%s/kml/" % self.date)
+            kml_dir = self.gps_rtk.get_kml_dir()
+            rospy.loginfo("successfully created gps_rtk kml file in %s" % kml_dir)
 
         if self.v_gps_rtk_png:
-            print("visualize gps_rtk png from %s" % self.date)
+            rospy.loginfo("visualize gps_rtk png from date %s" % self.date)
             self.gps_rtk = GPS_RTK(date=self.date)
             self.gps_rtk.save_gps_rtk_png()
-            print("successfully created gps_rtk png file in /plots/%s/png/" % self.date)
+            png_gps_rtk_dir = self.gps_rtk.get_png_gps_rtk_dir()
+            rospy.loginfo("successfully created gps_rtk png file in %s" % png_gps_rtk_dir)
 
         if self.v_odom_kml:
-            print("visualize wheel odometry kml from %s" % self.date)
+            rospy.loginfo("visualize wheel odometry kml from date %s" % self.date)
             self.wheel_odom = WheelOdom(date=self.date)
             self.wheel_odom.save_kml_line()
-            print("successfully created wheel odometry kml file in /plots/%s/kml/" % self.date)
+            kml_dir = self.wheel_odom.get_kml_dir()
+            rospy.loginfo("successfully created wheel odometry kml file in %s" % kml_dir)
 
         if self.v_odom_png:
-            print("visualize wheel odometry png from %s" % self.date)
+            rospy.loginfo("visualize wheel odometry png from date %s" % self.date)
             self.wheel_odom = WheelOdom(date=self.date)
             self.wheel_odom.save_wheel_odom_png()
-            print("successfully created wheel odometry png file in /plots/%s/png/" % self.date)
+            png_odom_dir = self.wheel_odom.get_png_odom_dir()
+            rospy.loginfo("successfully created wheel odometry png file in %s/" % png_odom_dir)
 
         if self.v_all:
-            print("visualizes all data from %s" % self.date)
+            rospy.loginfo("visualizes all data from date %s" % self.date)
             self.all = AllSensors(date=self.date)
             self.all.plot()
-            print("successfully created raw_data_all png file in /plots/%s/png/" % self.date)
+            png_all_dir = self.all.get_png_all_dir()
+            rospy.loginfo("successfully created raw_data_all png file in %s" % png_all_dir)
 
         else:
-            print("no matching arguments were found")
+            rospy.loginfo("no matching arguments were found")
 

@@ -6,7 +6,7 @@ from nclt2ros.transformer.coordinate_frame import CoordinateFrame
 
 
 class GPS_RTK(Plotter):
-    """Class to visualize the GPS RTK as a kml and png file
+    """Class to visualize the GPS RTK data as a kml and png file
 
     USAGE:
             GPS_RTK(date='2013-01-10', output_file='gps_rtk')
@@ -30,7 +30,6 @@ class GPS_RTK(Plotter):
 
     def save_kml_line(self):
         """visualize the gps rtk data as a kml file
-
         """
 
         lat = self.gps_rtk[:, 3]
@@ -83,3 +82,9 @@ class GPS_RTK(Plotter):
 
         plt.show()
 
+    def get_png_gps_rtk_dir(self):
+        """get the png gps rtk directory
+
+        :return: path to png gps rtk directory
+        """
+        return self.visualization_png_gps_rtk_dir
