@@ -1,12 +1,12 @@
 
 # NCLT2ROS
 
-With [nclt2ros](https://github.com/bierschi/nclt2rosbag) it is possible to
+The [nclt2ros](https://github.com/bierschi/nclt2rosbag) package provides ROS nodes for
 
-- [download](https://github.com/bierschi/nclt2rosbag#downloadlaunch)
-- [extract](https://github.com/bierschi/nclt2rosbag#downloadlaunch)
-- [visualize](https://github.com/bierschi/nclt2rosbag#visualizelaunch)
-- [convert](https://github.com/bierschi/nclt2rosbag#convertlaunch)
+- [downloading](https://github.com/bierschi/nclt2rosbag#downloadlaunch)
+- [extracting](https://github.com/bierschi/nclt2rosbag#downloadlaunch)
+- [visualizing](https://github.com/bierschi/nclt2rosbag#visualizelaunch)
+- [converting](https://github.com/bierschi/nclt2rosbag#convertlaunch)
 
 the data from [The University of Michigan North Campus Long-Term Vision and LIDAR Dataset.](http://robots.engin.umich.edu/nclt/)
 

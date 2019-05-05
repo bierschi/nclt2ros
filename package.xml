@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>nclt2ros</name>
-  <version>0.0.0</version>
-  <description>ROS package to download, extract, convert and visualize the NCLT Dataset</description>
+  <version>1.0.0</version>
+  <description>nclt2ros package provides ROS nodes for downloading, extracting, converting and visualizing the NCLT Dataset</description>
 
   <maintainer email="christian.bierschneider@web.de">christian bierschneider</maintainer>
   <author email="christian.bierschneider@web.de">christian bierschneider</author>
@@ -22,7 +22,13 @@
 
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
+  <exec_depend>python-numpy</exec_depend>
+  <exec_depend>python-matplotlib</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>tf</exec_depend>
 
+  <exec_depend>simplekml</exec_depend>
 </package>

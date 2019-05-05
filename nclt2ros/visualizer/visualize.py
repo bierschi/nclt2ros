@@ -1,9 +1,9 @@
 import rospy
-from nclt2ros.visualizer.gt         import GroundTruth
-from nclt2ros.visualizer.gps        import GPS
-from nclt2ros.visualizer.gps_rtk    import GPS_RTK
+from nclt2ros.visualizer.gt import GroundTruth
+from nclt2ros.visualizer.gps import GPS
+from nclt2ros.visualizer.gps_rtk import GPS_RTK
 from nclt2ros.visualizer.wheel_odom import WheelOdom
-from nclt2ros.visualizer.all        import AllSensors
+from nclt2ros.visualizer.all import AllSensors
 
 
 class Visualize:
@@ -30,6 +30,8 @@ class Visualize:
         for (key, value) in kwargs.iteritems():
             if hasattr(self, key):
                 setattr(self, key, value)
+
+        # TODO expand with more commands
 
         if self.v_gt_kml:
             rospy.loginfo("visualize ground truth kml from date %s" % self.date)
