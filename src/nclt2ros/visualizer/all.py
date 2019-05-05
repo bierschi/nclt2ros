@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
-from src.nclt2ros.visualizer.plotter import Plotter
-from src.nclt2ros import GroundTruth
-from src.nclt2ros import GPS_RTK
-from src.nclt2ros import GPS
-from src.nclt2ros import WheelOdom
+from nclt2ros.visualizer.plotter import Plotter
+from nclt2ros.visualizer.gt import GroundTruth
+from nclt2ros.visualizer.gps_rtk import GPS_RTK
+from nclt2ros.visualizer.gps import GPS
+from nclt2ros.visualizer.wheel_odom import WheelOdom
 
 
 class AllSensors(Plotter, GroundTruth, GPS_RTK, GPS, WheelOdom):

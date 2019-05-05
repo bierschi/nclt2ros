@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-from src.nclt2ros.visualizer.plotter import Plotter
-from src.nclt2ros import CoordinateFrame
+from nclt2ros.visualizer.plotter import Plotter
+from nclt2ros.transformer.coordinate_frame import CoordinateFrame
 
 
 class WheelOdom(Plotter):

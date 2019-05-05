@@ -3,7 +3,7 @@
 import rospy
 from nclt2ros.downloader.download import Download
 from nclt2ros.extractor.extract import Extract
-from definitions import ROOT_DIR
+from nclt2ros.definitions import ROOT_DIR
 
 
 def main():

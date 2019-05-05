@@ -6,8 +6,8 @@ import tf2_msgs.msg
 import tf.transformations
 
 from sensor_msgs.msg import LaserScan
-from src.nclt2ros.extractor.base_raw_data import BaseRawData
-from src.nclt2ros.converter import BaseConvert
+from nclt2ros.extractor.base_raw_data import BaseRawData
+from nclt2ros.converter.base_convert import BaseConvert
 
 
 class HokuyoData(BaseRawData, BaseConvert):

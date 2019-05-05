@@ -4,15 +4,15 @@ import subprocess
 import sys
 import rospy
 
-from src.nclt2ros import ReadGroundTruth
-from src.nclt2ros import ReadGroundTruthCovariance
-from src.nclt2ros import ReadSensorData
-from src.nclt2ros.transformer.hokuyo_data import HokuyoData
-from src.nclt2ros import VelodyneSyncData
-from src.nclt2ros.transformer.image_data import ImageData
-from src.nclt2ros.extractor.base_raw_data import BaseRawData
-from src.nclt2ros import RosSensorMsg
-from src.nclt2ros.converter import BaseConvert
+from nclt2ros.extractor.read_ground_truth import ReadGroundTruth
+from nclt2ros.extractor.read_ground_truth_covariance import ReadGroundTruthCovariance
+from nclt2ros.extractor.read_sensor_data import ReadSensorData
+from nclt2ros.transformer.hokuyo_data import HokuyoData
+from nclt2ros.transformer.velodyne_sync_data import VelodyneSyncData
+from nclt2ros.transformer.image_data import ImageData
+from nclt2ros.extractor.base_raw_data import BaseRawData
+from nclt2ros.transformer.sensor_data import RosSensorMsg
+from nclt2ros.converter.base_convert import BaseConvert
 
 
 class ToRosbag(BaseRawData, BaseConvert):

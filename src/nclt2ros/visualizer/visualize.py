@@ -1,9 +1,9 @@
 import rospy
-from src.nclt2ros import GroundTruth
-from src.nclt2ros import GPS
-from src.nclt2ros import GPS_RTK
-from src.nclt2ros import WheelOdom
-from src.nclt2ros import AllSensors
+from nclt2ros.visualizer.gt import GroundTruth
+from nclt2ros.visualizer.gps import GPS
+from nclt2ros.visualizer.gps_rtk import GPS_RTK
+from nclt2ros.visualizer.wheel_odom import WheelOdom
+from nclt2ros.visualizer.all import AllSensors
 
 
 class Visualize:

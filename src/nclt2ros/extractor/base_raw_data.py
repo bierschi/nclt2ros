@@ -1,6 +1,6 @@
 import os
 import rospy
-from definitions import ROOT_DIR
+from nclt2ros.definitions import ROOT_DIR
 
 
 class BaseRawData:
