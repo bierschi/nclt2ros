@@ -135,6 +135,9 @@ launch file for converting the raw data to rosbag files
 
 ## Usage
 
+
+#### building from source 
+
 create a catkin workspace
 <pre><code>
 mkdir -p ~/catkin_ws/src<br>
@@ -165,7 +168,8 @@ roslaunch nclt2ros download.launch
 
 ## Examples
 
-visualized all data as a png file
+#### data from date 2013-01-10
+visualizing as a png file
 
 <div align="left">
   <br>
@@ -173,16 +177,21 @@ visualized all data as a png file
 </div>
 
 <br>
-visualized all data as a kml file:
+visualizing as a kml file:
 
 <div align="left">
   <br>
   <img src="examples/nclt_all_kml.png" alt="example" width="673" height="375">
 </div>
 
+#### data from date 2012-01-08
+
+
+#### rosbag file
+
 
 ## Transformation Tree
-change `frame_id` and `topic_name` in launch file `convert.launch`
+for self defined transformation tree, change `frame_id` and `topic_name` in launch file `convert.launch`
 
 <div align="left">
   <br>
