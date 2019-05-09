@@ -63,6 +63,8 @@ launch file for visualizing specific data
         <param name="raw_data_path" value="/home/christian/nclt2ros/raw_data" />
         <param name="plot_path"     value="/home/christian/nclt2ros/plots" />
         
+        <param name="show_plot"     value="True" />
+        
         <param name="gt_kml"        value="False" />
         <param name="gt_png"        value="True" />
         <param name="gps_kml"       value="False" />
