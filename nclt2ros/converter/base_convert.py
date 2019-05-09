@@ -15,8 +15,8 @@ class BaseConvert:
         self.date = date
 
         # create rosbag directory
-        ROSBAG_PATH = ROOT_DIR + '/rosbags/'
-        self.rosbag_path = rospy.get_param('~rosbag_output_path', ROSBAG_PATH)
+        ROSBAG_PATH_DFLT = ROOT_DIR + '/nclt2ros/rosbags/'
+        self.rosbag_path = rospy.get_param('~rosbag_output_path', ROSBAG_PATH_DFLT)
 
         if self.rosbag_path.endswith('/'):
             self.rosbag_dir = self.rosbag_path + str(self.date)

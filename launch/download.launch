@@ -2,7 +2,7 @@
     # download
     <node name="nclt2ros" pkg="nclt2ros" type="nclt2downloader" output="screen">
 
-        <param name="date"            value="2012-01-08"/>
+        <param name="date"            value="2012-01-15"/>
         <param name="raw_data_path"   value="/home/christian/nclt2ros/raw_data" />
 
         <param name="lb3"             value="False" />

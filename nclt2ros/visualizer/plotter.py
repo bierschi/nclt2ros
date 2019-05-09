@@ -22,7 +22,8 @@ class Plotter:
         else:
             raise TypeError('"date" must be of type string')
 
-        PLOT_PATH_DFLT = ROOT_DIR + '/plots/'
+        PLOT_PATH_DFLT = ROOT_DIR + '/nclt2ros/plots/'
+        PLOT_PATH_DFLT = '/home/christian/nclt2ros/plots/'  # TODO remove, only for debugging
         self.plot_path = rospy.get_param('~plot_path', PLOT_PATH_DFLT)
 
         if self.plot_path.endswith('/'):

@@ -1,3 +1,4 @@
+import math
 import matplotlib.pyplot as plt
 from nclt2ros.visualizer.plotter import Plotter
 from nclt2ros.transformer.coordinate_frame import CoordinateFrame
@@ -7,21 +8,27 @@ class WheelOdom(Plotter):
     """Class to visualize the wheel odometry data as a kml and png file
 
     USAGE:
-            WheelOdom(date='2013-01-10', output_file='wheel_odom')
+            WheelOdom(date='2013-01-10', output_file='wheel_odom', plt_show=True)
 
     """
-    def __init__(self, date, output_file='wheel_odom'):
+    def __init__(self, date, output_file='wheel_odom', plt_show=True):
 
         if isinstance(output_file, str):
             self.output_file = output_file
         else:
             raise TypeError("'output_file' must be type of string")
 
-        # init base class
-        Plotter.__init__(self, date=date)
+        self.date = date
+        self.plt_show = plt_show
 
-        # transformer coordinate frame into 'odom'
-        self.odom_converter = CoordinateFrame(origin='odom')
+        # init base class
+        Plotter.__init__(self, date=self.date)
+
+        # transformer coordinate frame into 'odom' or 'gt'
+        if self.date == '2013-01-10' or self.date == '2012-01-15':
+            self.odom_converter = CoordinateFrame(origin='odom')
+        else:
+            self.odom_converter = CoordinateFrame(origin='gt')
 
         # load data
         self.wheel_odom = self.reader.read_odometry_mu_100hz_csv(all_in_one=True)
@@ -34,17 +41,23 @@ class WheelOdom(Plotter):
         wheel_odom_y = self.wheel_odom[:, 2]
         odom_list = list()
 
+        if len(wheel_odom_x) > 200000:
+            divider = 15
+        else:
+            divider = 5
+
         for row, (x_i, y_j) in enumerate(zip(wheel_odom_x, wheel_odom_y)):
 
-            lat = self.odom_converter.get_lat(x=x_i)
-            lng = self.odom_converter.get_lon(y=y_j)
-            tup = (lng, lat)
+            if not math.isnan(x_i) and not math.isnan(y_j):
+                lat = self.odom_converter.get_lat(x=x_i)
+                lng = self.odom_converter.get_lon(y=y_j)
+                tup = (lng, lat)
 
-            # minimize the elements in the kml output file
-            if (row % 5) == 0:
-                odom_list.append(tup)
+                # minimize the elements in the kml output file
+                if (row % divider) == 0:
+                    odom_list.append(tup)
 
-        ls = self.kml.newlinestring(name="wheel odometry", coords=odom_list, description="latitute, longitude from wheel odometry")
+        ls = self.kml.newlinestring(name="wheel odometry", coords=odom_list, description="latitute and longitude from wheel odometry")
         ls.style.linestyle.width = 1
         ls.style.linestyle.color = self.magenta
 
@@ -69,12 +82,13 @@ class WheelOdom(Plotter):
         plt.title('Wheel Odometry')
         plt.xlabel('x in meter')
         plt.ylabel('y in meter')
-        plt.legend()
+        plt.legend(loc='upper left')
 
         plt.grid()
         plt.savefig(self.visualization_png_wheel_odom_dir + 'wheel_odom.png')
 
-        plt.show()
+        if self.plt_show:
+            plt.show()
 
     def get_png_odom_dir(self):
         """get the png odom directory
@@ -83,3 +97,7 @@ class WheelOdom(Plotter):
         """
         return self.visualization_png_wheel_odom_dir
 
+
+if __name__ == '__main__':
+    odom = WheelOdom(date='2012-01-15')
+    odom.save_wheel_odom_png()
