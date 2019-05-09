@@ -9,11 +9,12 @@ from definitions import ROOT_DIR
 def main():
 
     rospy.init_node('nclt2downloader')
+    rospy.loginfo("running node 'nclt2downloader'")
 
     date = rospy.get_param('~date', '2013-01-10')
 
-    DEFAULT_PATH = ROOT_DIR + '/raw_data/'
-    raw_data_path = rospy.get_param('~raw_data_path', DEFAULT_PATH)
+    RAW_DATA_PATH_DFLT = ROOT_DIR + '/nclt2ros/raw_data/'
+    raw_data_path = rospy.get_param('~raw_data_path', RAW_DATA_PATH_DFLT)
 
     lb3    = rospy.get_param('~lb3',    False)
     sen    = rospy.get_param('~sen',    False)
@@ -25,6 +26,8 @@ def main():
     loader = Download(date=date, raw_data_path=raw_data_path, lb3=lb3, sen=sen, vel=vel, hokuyo=hokuyo, gt=gt, gt_cov=gt_cov)
 
     extractor = Extract(date=date, lb3=lb3, sen=sen, vel=vel, hokuyo=hokuyo)
+
+    rospy.loginfo("terminating node 'nclt2downloader'")
 
 
 if __name__ == '__main__':

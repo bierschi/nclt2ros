@@ -1,3 +1,4 @@
+import math
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -9,21 +10,27 @@ class GPS_RTK(Plotter):
     """Class to visualize the GPS RTK data as a kml and png file
 
     USAGE:
-            GPS_RTK(date='2013-01-10', output_file='gps_rtk')
+            GPS_RTK(date='2013-01-10', output_file='gps_rtk', plt_show=True)
 
     """
-    def __init__(self, date, output_file='gps_rtk'):
+    def __init__(self, date, output_file='gps_rtk', plt_show=True):
 
         if isinstance(output_file, str):
             self.output_file = output_file
         else:
             raise TypeError("'output_file' must be type of string")
 
-        # init base class
-        Plotter.__init__(self, date=date)
+        self.date = date
+        self.plt_show = plt_show
 
-        # transform coordinate frame into 'odom'
-        self.gps_rtk_converter = CoordinateFrame(origin='odom')
+        # init base class
+        Plotter.__init__(self, date=self.date)
+
+        # transform coordinate frame into 'odom' or 'gt'
+        if self.date == '2013-01-10':
+            self.gps_rtk_converter = CoordinateFrame(origin='odom')
+        else:
+            self.gps_rtk_converter = CoordinateFrame(origin='gt')
 
         # load data
         self.gps_rtk = self.reader.read_gps_rtk_csv(all_in_one=True)
@@ -33,14 +40,16 @@ class GPS_RTK(Plotter):
         """
 
         lat = self.gps_rtk[:, 3]
-        lon = self.gps_rtk[:, 4]
+        lng = self.gps_rtk[:, 4]
         gps_rtk_list = list()
 
-        for (i_lat, j_lon) in zip(lat, lon):
-            tup = (np.rad2deg(j_lon), np.rad2deg(i_lat))  # swap and convert lat long to deg
-            gps_rtk_list.append(tup)
+        for (i_lat, j_lng) in zip(lat, lng):
 
-        ls = self.kml.newlinestring(name="gps rtk", coords=gps_rtk_list, description="latitude, longitude from gps rtk")
+            if not math.isnan(i_lat) and not math.isnan(j_lng):
+                tup = (np.rad2deg(j_lng), np.rad2deg(i_lat))  # swap and convert lat long to deg
+                gps_rtk_list.append(tup)
+
+        ls = self.kml.newlinestring(name="gps rtk", coords=gps_rtk_list, description="latitude and longitude from gps rtk")
         ls.style.linestyle.width = 1
         ls.style.linestyle.color = self.red
 
@@ -52,15 +61,17 @@ class GPS_RTK(Plotter):
         :return: list for x coordinates, list for y coordinates
         """
         lat = self.gps_rtk[:, 3]
-        lon = self.gps_rtk[:, 4]
+        lng = self.gps_rtk[:, 4]
         x_list = list()
         y_list = list()
 
-        for (i_lat, j_lon) in zip(lat, lon):
-            x = self.gps_rtk_converter.get_x(lat=np.rad2deg(i_lat))
-            y = self.gps_rtk_converter.get_y(lon=np.rad2deg(j_lon))
-            x_list.append(x)
-            y_list.append(y)
+        for (i_lat, j_lng) in zip(lat, lng):
+
+            if not math.isnan(i_lat) and not math.isnan(j_lng):
+                x = self.gps_rtk_converter.get_x(lat=np.rad2deg(i_lat))
+                y = self.gps_rtk_converter.get_y(lon=np.rad2deg(j_lng))
+                x_list.append(x)
+                y_list.append(y)
 
         return x_list, y_list
 
@@ -80,7 +91,8 @@ class GPS_RTK(Plotter):
         plt.grid()
         plt.savefig(self.visualization_png_gps_rtk_dir + 'gps_rtk.png')
 
-        plt.show()
+        if self.plt_show:
+            plt.show()
 
     def get_png_gps_rtk_dir(self):
         """get the png gps rtk directory
@@ -88,3 +100,8 @@ class GPS_RTK(Plotter):
         :return: path to png gps rtk directory
         """
         return self.visualization_png_gps_rtk_dir
+
+
+if __name__ == '__main__':
+    gps = GPS_RTK(date='2012-01-08')
+    gps.save_gps_rtk_png()

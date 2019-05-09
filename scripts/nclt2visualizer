@@ -7,8 +7,10 @@ from nclt2ros.visualizer.visualize import Visualize
 def main():
 
     rospy.init_node('nclt2visualizer')
+    rospy.loginfo("running node 'nclt2visualizer'")
 
     date = rospy.get_param('~date', '2013-01-10')
+    show_plot = rospy.get_param('~show_plot', True)
 
     v_gt_kml      = rospy.get_param('~gt_kml',      False)
     v_gt_png      = rospy.get_param('~gt_png',      False)
@@ -20,10 +22,12 @@ def main():
     v_odom_png    = rospy.get_param('~odom_png',    False)
     v_all         = rospy.get_param('~all',         False)
 
-    visualizer = Visualize(date=date,
+    visualizer = Visualize(date=date, show_plot=show_plot,
                            v_gt_kml=v_gt_kml, v_gt_png=v_gt_png, v_gps_kml=v_gps_kml, v_gps_png=v_gps_png,
                            v_gps_rtk_kml=v_gps_rtk_kml, v_gps_rtk_png=v_gps_rtk_png, v_odom_kml=v_odom_kml,
                            v_odom_png=v_odom_png, v_all=v_all)
+
+    rospy.loginfo("terminating node 'nclt2visualizer'")
 
 
 if __name__ == '__main__':

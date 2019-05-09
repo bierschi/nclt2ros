@@ -1,3 +1,4 @@
+import math
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -9,37 +10,46 @@ class GPS(Plotter):
     """Class to visualize the GPS data as a kml and png file
 
     USAGE:
-            GPS(date='2013-01-10', output_file='gps')
+            GPS(date='2013-01-10', output_file='gps', plt_show=True)
 
     """
-    def __init__(self, date, output_file='gps'):
+    def __init__(self, date, output_file='gps', plt_show=True):
+
         if isinstance(output_file, str):
             self.output_file = output_file
         else:
             raise TypeError("'output_file' must be type of string")
 
-        # init base class
-        Plotter.__init__(self, date=date)
+        self.date = date
+        self.plt_show = plt_show
 
-        # transformer coordinate frame into 'odom'
-        self.gps_converter = CoordinateFrame(origin='odom')
+        # init base class
+        Plotter.__init__(self, date=self.date)
+
+        # transformer coordinate frame into 'odom' or 'gt'
+        if self.date == '2013-01-10':
+            self.gps_converter = CoordinateFrame(origin='odom')
+        else:
+            self.gps_converter = CoordinateFrame(origin='gt')
 
         # load data
-        self.gps     = self.reader.read_gps_csv(all_in_one=True)
+        self.gps = self.reader.read_gps_csv(all_in_one=True)
 
     def save_kml_line(self):
         """visualize the gps data as a kml file
         """
 
         lat = self.gps[:, 3]
-        lon = self.gps[:, 4]
+        lng = self.gps[:, 4]
         gps_list = list()
 
-        for (i, j) in zip(lat, lon):
-            tup = (np.rad2deg(j), np.rad2deg(i))  # swap and convert lat long to deg
-            gps_list.append(tup)
+        for (i, j) in zip(lat, lng):
 
-        ls = self.kml.newlinestring(name="gps", coords=gps_list, description="latitude, longitude from gps")
+            if not math.isnan(i) and not math.isnan(j):
+                tup = (np.rad2deg(j), np.rad2deg(i))  # swap and convert lat long to deg
+                gps_list.append(tup)
+
+        ls = self.kml.newlinestring(name="gps", coords=gps_list, description="latitude and longitude from gps")
         ls.style.linestyle.width = 1
         ls.style.linestyle.color = self.yellow
 
@@ -51,15 +61,17 @@ class GPS(Plotter):
         :return: list for x coordinates, list for y coordinates
         """
         lat = self.gps[:, 3]
-        lon = self.gps[:, 4]
+        lng = self.gps[:, 4]
         x_list = list()
         y_list = list()
 
-        for (i, j) in zip(lat, lon):
-            x = self.gps_converter.get_x(lat=np.rad2deg(i))
-            y = self.gps_converter.get_y(lon=np.rad2deg(j))
-            x_list.append(x)
-            y_list.append(y)
+        for (i, j) in zip(lat, lng):
+
+            if not math.isnan(i) and not math.isnan(j):
+                x = self.gps_converter.get_x(lat=np.rad2deg(i))
+                y = self.gps_converter.get_y(lon=np.rad2deg(j))
+                x_list.append(x)
+                y_list.append(y)
 
         return x_list, y_list
 
@@ -77,8 +89,8 @@ class GPS(Plotter):
 
         plt.grid()
         plt.savefig(self.visualization_png_gps_dir + 'gps.png')
-
-        plt.show()
+        if self.plt_show:
+            plt.show()
 
     def get_png_gps_dir(self):
         """get the png gps directory
@@ -87,4 +99,8 @@ class GPS(Plotter):
         """
         return self.visualization_png_gps_dir
 
+
+if __name__ == '__main__':
+    gps = GPS(date='2012-01-08')
+    gps.save_kml_line()
 
