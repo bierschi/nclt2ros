@@ -26,11 +26,13 @@ class GPS(Plotter):
         # init base class
         Plotter.__init__(self, date=self.date)
 
+        self.offset_dates = ['2012-01-08']
+
         # transformer coordinate frame into 'odom' or 'gt'
-        if self.date == '2013-01-10':
-            self.gps_converter = CoordinateFrame(origin='odom')
-        else:
+        if self.date in self.offset_dates:
             self.gps_converter = CoordinateFrame(origin='gt')
+        else:
+            self.gps_converter = CoordinateFrame(origin='odom')
 
         # load data
         self.gps = self.reader.read_gps_csv(all_in_one=True)
@@ -101,6 +103,7 @@ class GPS(Plotter):
 
 
 if __name__ == '__main__':
-    gps = GPS(date='2012-01-08')
+    gps = GPS(date='2012-02-02')
+    gps.save_gps_png()
     gps.save_kml_line()
 

@@ -26,11 +26,13 @@ class GPS_RTK(Plotter):
         # init base class
         Plotter.__init__(self, date=self.date)
 
+        self.offset_dates = ['2012-01-08']
+
         # transform coordinate frame into 'odom' or 'gt'
-        if self.date == '2013-01-10':
-            self.gps_rtk_converter = CoordinateFrame(origin='odom')
-        else:
+        if self.date in self.offset_dates:
             self.gps_rtk_converter = CoordinateFrame(origin='gt')
+        else:
+            self.gps_rtk_converter = CoordinateFrame(origin='odom')
 
         # load data
         self.gps_rtk = self.reader.read_gps_rtk_csv(all_in_one=True)
@@ -103,5 +105,6 @@ class GPS_RTK(Plotter):
 
 
 if __name__ == '__main__':
-    gps = GPS_RTK(date='2012-01-08')
+    gps = GPS_RTK(date='2012-02-02')
     gps.save_gps_rtk_png()
+    gps.save_kml_line()

@@ -24,11 +24,13 @@ class WheelOdom(Plotter):
         # init base class
         Plotter.__init__(self, date=self.date)
 
+        self.offset_dates_odom = ['2012-01-08']
+
         # transformer coordinate frame into 'odom' or 'gt'
-        if self.date == '2013-01-10' or self.date == '2012-01-15':
-            self.odom_converter = CoordinateFrame(origin='odom')
-        else:
+        if self.date in self.offset_dates_odom:
             self.odom_converter = CoordinateFrame(origin='gt')
+        else:
+            self.odom_converter = CoordinateFrame(origin='odom')
 
         # load data
         self.wheel_odom = self.reader.read_odometry_mu_100hz_csv(all_in_one=True)
@@ -99,5 +101,6 @@ class WheelOdom(Plotter):
 
 
 if __name__ == '__main__':
-    odom = WheelOdom(date='2012-01-15')
+    odom = WheelOdom(date='2012-02-02')
     odom.save_wheel_odom_png()
+    odom.save_kml_line()

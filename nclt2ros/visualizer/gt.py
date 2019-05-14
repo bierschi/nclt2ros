@@ -25,8 +25,9 @@ class GroundTruth(Plotter):
         # init base class
         Plotter.__init__(self, date=self.date)
 
-        # transformer coordinate frame into 'gt'
+        # transform coordinate frame into 'gt'
         self.gt_converter = CoordinateFrame(origin='gt')
+        self.offset_dates_gt = ['2013-01-10', '2012-01-15', '2012-01-22', '2012-02-02']
 
         # load gt data
         self.gt = self.reader_gt.read_gt_csv(all_in_one=True)
@@ -73,8 +74,17 @@ class GroundTruth(Plotter):
         """
         gt_x = self.gt[:, 1]
         gt_y = self.gt[:, 2]
-        first_x_coord = gt_x[0]
-        first_y_coord = gt_y[0]
+
+        if not math.isnan(gt_x[0]) and not math.isnan(gt_y[0]):
+            first_x_coord = gt_x[0]
+            first_y_coord = gt_y[0]
+        elif not math.isnan(gt_x[1]) and not math.isnan(gt_y[1]):
+            first_x_coord = gt_x[1]
+            first_y_coord = gt_y[1]
+        else:
+            first_x_coord = gt_x[2]
+            first_y_coord = gt_y[2]
+
         x_new = list()
         y_new = list()
 
@@ -82,7 +92,7 @@ class GroundTruth(Plotter):
 
             if not math.isnan(x_i) and not math.isnan(y_j):
                 # eliminate offset in this dataset
-                if self.date == '2013-01-10':
+                if self.date in self.offset_dates_gt:
                     x_i = x_i - first_x_coord
                     y_j = y_j - first_y_coord
                     y_new.append(y_j)
@@ -175,5 +185,6 @@ class GroundTruth(Plotter):
 
 
 if __name__ == '__main__':
-    gt = GroundTruth(date='2012-01-15')
+    gt = GroundTruth(date='2012-02-02')
     gt.save_gt_png()
+    #gt.save_kml_line()
